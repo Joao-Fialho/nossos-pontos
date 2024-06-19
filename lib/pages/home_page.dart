@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:nossos_pontos/components/card_name.dart';
 import 'package:nossos_pontos/components/points_modal.dart';
@@ -25,83 +27,111 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+
     return Scaffold(
+      backgroundColor: Colors.grey.shade900,
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: const Text('Nossos Pontos'),
+        backgroundColor: Colors.lightBlue.shade300,
+        title: const Text(
+          'Nossos Pontos',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w400),
+        ),
       ),
       body: Container(
-        height: MediaQuery.of(context).size.height,
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: NetworkImage(
-                'https://is.zobj.net/image-server/v1/images?r=_SlWO-YyhRhjdAbRjN3dTTYRus4E-L6OZDNKFFZGGJ0zaqphgtHDldPvy3l5fchlGujiHFc2y4cmHrkGgdbIo4ulnquiKu2uqABJA9cB6XqYjb0aATXMegpMFr62KI-jOgWN1f6-3c6OyNNZ9uaeFh2NpS13cGQlpqFdP9Ucu9dtyV5qr6fbGJ-53g1mNIqbHoyFvDUFBVU3N5i6v7qzDpRsGqq9reIHZ1EM0JcJ-BqrPl9ZTaGb0crUpGI'),
-            fit: BoxFit.cover,
-          ),
-        ),
-        child: SingleChildScrollView(
-          child: Stack(
+        height: size.height,
+        width: size.width,
+        child: ListView(children: [
+          Stack(
             children: [
-              Column(
-                children: [
-                  CardName(
-                    name: 'Joao',
-                    points: 175,
-                    rankItemObjectList: [
-                      RankItemObject(
-                        motivo: 'teste teste',
-                        points: 100,
-                        pointsPositivos: false,
+              SizedBox(
+                height: size.height,
+                width: size.width,
+                child: Stack(
+                  children: [
+                    Container(
+                      height: size.height,
+                      width: size.width,
+                      child: Image.asset(
+                        'assets/background_image.jpg',
+                        fit: BoxFit.cover,
                       ),
-                      RankItemObject(
-                        motivo: 'teste teste',
-                        points: 100,
-                        pointsPositivos: false,
+                    ),
+                    Positioned.fill(
+                      child: BackdropFilter(
+                        filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
+                        child: Container(
+                          color: Colors.grey.withOpacity(0.1),
+                        ),
                       ),
-                      RankItemObject(
-                        motivo: 'teste teste',
-                        points: 100,
-                        pointsPositivos: true,
-                      ),
-                      RankItemObject(
-                        motivo: 'teste teste',
-                        points: 100,
-                        pointsPositivos: true,
-                      ),
-                      RankItemObject(
-                        motivo: 'teste teste',
-                        points: 100,
-                        pointsPositivos: true,
-                      ),
-                    ],
-                  ),
-                  CardName(
-                    name: 'Kelly',
-                    points: 180,
-                    rankItemObjectList: [
-                      RankItemObject(
-                        motivo: 'teste teste',
-                        points: 100,
-                        pointsPositivos: true,
-                      ),
-                      RankItemObject(
-                        motivo: 'teste teste',
-                        points: 100,
-                        pointsPositivos: true,
-                      ),
-                      RankItemObject(
-                        motivo: 'teste teste',
-                        points: 100,
-                        pointsPositivos: true,
-                      ),
-                      RankItemObject(
-                        motivo: 'teste teste',
-                        points: 100,
-                        pointsPositivos: true,
-                      ),
-                    ],
-                  ),
-                ],
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    CardName(
+                      name: 'João',
+                      rankItemObjectList: [
+                        RankItemObject(
+                          motivo: 'teste teste',
+                          points: 100,
+                          pointsPositivos: false,
+                        ),
+                        RankItemObject(
+                          motivo: 'teste teste',
+                          points: 100,
+                          pointsPositivos: false,
+                        ),
+                        RankItemObject(
+                          motivo: 'teste teste',
+                          points: 100,
+                          pointsPositivos: true,
+                        ),
+                        RankItemObject(
+                          motivo: 'teste teste',
+                          points: 100,
+                          pointsPositivos: true,
+                        ),
+                        RankItemObject(
+                          motivo: 'teste teste',
+                          points: 100,
+                          pointsPositivos: true,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    CardName(
+                      name: 'Kelly',
+                      rankItemObjectList: [
+                        RankItemObject(
+                          motivo: 'teste teste',
+                          points: 100,
+                          pointsPositivos: true,
+                        ),
+                        RankItemObject(
+                          motivo: 'teste teste',
+                          points: 100,
+                          pointsPositivos: true,
+                        ),
+                        RankItemObject(
+                          motivo: 'teste teste',
+                          points: 100,
+                          pointsPositivos: true,
+                        ),
+                        RankItemObject(
+                          motivo: 'teste teste',
+                          points: 100,
+                          pointsPositivos: true,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
               Visibility(
                 visible: widget.visible,
@@ -112,13 +142,14 @@ class _HomePageState extends State<HomePage> {
               ),
             ],
           ),
-        ),
+        ]),
       ),
       floatingActionButton: FloatingActionButton(
+        splashColor: Colors.blue,
+        backgroundColor: Colors.lightBlue.shade300,
         onPressed: visibleActive,
-        tooltip: 'Increment',
         child: const Icon(Icons.mode_edit_sharp),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      ),
     );
   }
 }
