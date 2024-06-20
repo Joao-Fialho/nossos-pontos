@@ -3,13 +3,12 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:nossos_pontos/components/card_name.dart';
 import 'package:nossos_pontos/components/points_modal.dart';
-import 'package:nossos_pontos/domain/rank_item_objetct.dart';
 
 class HomePage extends StatefulWidget {
   late bool visible;
   HomePage({
     super.key,
-    this.visible = false,
+    this.visible = true,
   });
   @override
   State<HomePage> createState() => _HomePageState();
@@ -28,7 +27,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-
     return Scaffold(
       backgroundColor: Colors.grey.shade900,
       appBar: AppBar(
@@ -74,61 +72,14 @@ class _HomePageState extends State<HomePage> {
                   children: [
                     CardName(
                       name: 'João',
-                      rankItemObjectList: [
-                        RankItemObject(
-                          motivo: 'teste teste',
-                          points: 100,
-                          pointsPositivos: false,
-                        ),
-                        RankItemObject(
-                          motivo: 'teste teste',
-                          points: 100,
-                          pointsPositivos: false,
-                        ),
-                        RankItemObject(
-                          motivo: 'teste teste',
-                          points: 100,
-                          pointsPositivos: true,
-                        ),
-                        RankItemObject(
-                          motivo: 'teste teste',
-                          points: 100,
-                          pointsPositivos: true,
-                        ),
-                        RankItemObject(
-                          motivo: 'teste teste',
-                          points: 100,
-                          pointsPositivos: true,
-                        ),
-                      ],
+                      rankItemObjectList: [],
                     ),
                     const SizedBox(
                       height: 10,
                     ),
                     CardName(
                       name: 'Kelly',
-                      rankItemObjectList: [
-                        RankItemObject(
-                          motivo: 'teste teste',
-                          points: 100,
-                          pointsPositivos: true,
-                        ),
-                        RankItemObject(
-                          motivo: 'teste teste',
-                          points: 100,
-                          pointsPositivos: true,
-                        ),
-                        RankItemObject(
-                          motivo: 'teste teste',
-                          points: 100,
-                          pointsPositivos: true,
-                        ),
-                        RankItemObject(
-                          motivo: 'teste teste',
-                          points: 100,
-                          pointsPositivos: true,
-                        ),
-                      ],
+                      rankItemObjectList: [],
                     ),
                   ],
                 ),
@@ -148,7 +99,10 @@ class _HomePageState extends State<HomePage> {
         splashColor: Colors.blue,
         backgroundColor: Colors.lightBlue.shade300,
         onPressed: visibleActive,
-        child: const Icon(Icons.mode_edit_sharp),
+        child: const Icon(
+          Icons.mode_edit_sharp,
+          color: Colors.white,
+        ),
       ),
     );
   }

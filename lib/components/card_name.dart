@@ -1,6 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
-import 'package:nossos_pontos/controllers/card_name_controller.dart';
+import 'package:nossos_pontos/controllers/points_controller.dart';
 import 'package:nossos_pontos/domain/rank_item_objetct.dart';
 
 class CardName extends StatefulWidget {
@@ -20,7 +20,7 @@ class CardName extends StatefulWidget {
 
 class _CardNameState extends State<CardName> {
   bool expansionTileExpanded = false;
-  var controller = CardNameController();
+  var controller = PointsController();
   @override
   Widget build(BuildContext context) {
     widget.points = controller.somaPoints(widget.rankItemObjectList);
@@ -34,7 +34,7 @@ class _CardNameState extends State<CardName> {
       collapsedIconColor: Colors.white,
       collapsedTextColor: Colors.white,
       collapsedShape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(50))),
+          borderRadius: BorderRadius.all(Radius.circular(25))),
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(20))),
       trailing: Icon(
@@ -65,11 +65,12 @@ class _CardNameState extends State<CardName> {
         ),
       ),
       children: [
-        SizedBox(
+        Container(
           height: size.height * 0.5,
           child: ListView.separated(
-            separatorBuilder: (context, index) => const SizedBox(
-              height: 10,
+            separatorBuilder: (context, index) => Container(
+              height: 3,
+              color: Colors.blue,
             ),
             itemBuilder: (BuildContext context, int index) {
               return Container(
@@ -90,7 +91,7 @@ class _CardNameState extends State<CardName> {
                       width: 40,
                     ),
                     Text(
-                      '${controller.pointsPositivos(widget.rankItemObjectList[index].pointsPositivos)} ${widget.rankItemObjectList[index].points}',
+                      '${controller.pointsPositivosString(widget.rankItemObjectList[index].pointsPositivos)} ${widget.rankItemObjectList[index].points}',
                       style: TextStyle(
                           color: widget.rankItemObjectList[index]
                                       .pointsPositivos ==
