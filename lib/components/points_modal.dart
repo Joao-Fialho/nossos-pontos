@@ -1,15 +1,11 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
-import 'package:nossos_pontos/controllers/points_controller.dart';
+import 'package:nossos_pontos/controllers/home_controller.dart';
 
 class PointsModal extends StatefulWidget {
-  final String name;
-  final double points;
+  final HomeController controller;
 
-  PointsModal({
-    required this.name,
-    required this.points,
-  });
+  const PointsModal({super.key, required this.controller});
 
   @override
   State<PointsModal> createState() => _PointsModalState();
@@ -18,10 +14,10 @@ class PointsModal extends StatefulWidget {
 class _PointsModalState extends State<PointsModal> {
   String motivo = '';
   int points = 0;
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    var controller = PointsController();
 
     return Stack(
       alignment: Alignment.center,
@@ -29,14 +25,14 @@ class _PointsModalState extends State<PointsModal> {
         Container(
           height: size.height,
           width: size.width,
-          color: Color(0x70000000),
+          color: const Color(0x70000000),
         ),
         AspectRatio(
           aspectRatio: 1 / 1,
           child: Container(
             width: size.width * 0.8,
-            padding: EdgeInsets.all(22),
-            margin: EdgeInsets.all(11),
+            padding: const EdgeInsets.all(22),
+            margin: const EdgeInsets.all(11),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15),
               color: Colors.blueAccent,
@@ -51,7 +47,7 @@ class _PointsModalState extends State<PointsModal> {
                       maxLines: 5,
                       minLines: 1,
                       cursorColor: Colors.white,
-                      cursorRadius: Radius.circular(10),
+                      cursorRadius: const Radius.circular(10),
                       cursorWidth: 2,
                       onChanged: (value) {
                         motivo = value;
@@ -77,9 +73,9 @@ class _PointsModalState extends State<PointsModal> {
                       height: 40,
                     ),
                     TextFormField(
-                      style: TextStyle(color: Colors.white, fontSize: 15),
+                      style: const TextStyle(color: Colors.white, fontSize: 15),
                       cursorColor: Colors.white,
-                      cursorRadius: Radius.circular(10),
+                      cursorRadius: const Radius.circular(10),
                       cursorWidth: 2,
                       decoration: InputDecoration(
                           labelText: 'Pontos',
@@ -115,7 +111,8 @@ class _PointsModalState extends State<PointsModal> {
                       onTap: () {
                         setState(() {
                           if (motivo.isNotEmpty && points != 0) {
-                            controller.adicionarPoints(motivo, points, false);
+                            widget.controller
+                                .descontarPoints(motivo, points, false);
                           }
                         });
                       },
@@ -125,16 +122,36 @@ class _PointsModalState extends State<PointsModal> {
                           color: Colors.red,
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        child: const Text('Descontar'),
+                        child: const Text(
+                          'Descontar',
+                          style: TextStyle(
+                              color: Colors.white, fontWeight: FontWeight.w500),
+                        ),
                       ),
                     ),
-                    Container(
-                      padding: const EdgeInsets.all(11),
-                      decoration: BoxDecoration(
-                        color: Colors.green,
-                        borderRadius: BorderRadius.circular(10),
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          if (motivo.isNotEmpty && points != 0) {
+                            setState(() {
+                              widget.controller
+                                  .adicionarPoints(motivo, points, true);
+                            });
+                          }
+                        });
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(11),
+                        decoration: BoxDecoration(
+                          color: Colors.green,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: const Text(
+                          'Adicionar',
+                          style: TextStyle(
+                              color: Colors.white, fontWeight: FontWeight.w500),
+                        ),
                       ),
-                      child: const Text('Adicionar'),
                     ),
                   ],
                 ),

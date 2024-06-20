@@ -1,17 +1,19 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
-import 'package:nossos_pontos/controllers/points_controller.dart';
-import 'package:nossos_pontos/domain/rank_item_objetct.dart';
+import 'package:nossos_pontos/controllers/home_controller.dart';
+import 'package:nossos_pontos/domain/points_item_model.dart';
 
 class CardName extends StatefulWidget {
   final String name;
-  late int points;
-  final List<RankItemObject> rankItemObjectList;
-
-  CardName({
+  final int pointsTotal;
+  final List<PointsItemList> pointsItemList;
+  final HomeController controller;
+  const CardName({
     super.key,
     required this.name,
-    required this.rankItemObjectList,
+    required this.pointsTotal,
+    required this.pointsItemList,
+    required this.controller,
   });
 
   @override
@@ -20,10 +22,8 @@ class CardName extends StatefulWidget {
 
 class _CardNameState extends State<CardName> {
   bool expansionTileExpanded = false;
-  var controller = PointsController();
   @override
   Widget build(BuildContext context) {
-    widget.points = controller.somaPoints(widget.rankItemObjectList);
     final size = MediaQuery.of(context).size;
 
     return ExpansionTile(
@@ -58,20 +58,22 @@ class _CardNameState extends State<CardName> {
               style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             Text(
-              '${widget.points}',
+              '${widget.pointsTotal}',
               style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
           ],
         ),
       ),
       children: [
-        Container(
+        SizedBox(
           height: size.height * 0.5,
           child: ListView.separated(
+            itemCount: widget.pointsItemList.length,
             separatorBuilder: (context, index) => Container(
               height: 3,
               color: Colors.blue,
             ),
+            reverse: true,
             itemBuilder: (BuildContext context, int index) {
               return Container(
                 color: Colors.white,
@@ -81,8 +83,8 @@ class _CardNameState extends State<CardName> {
                   children: [
                     Expanded(
                       child: Text(
-                        controller.firstLetterCapitalized(
-                          widget.rankItemObjectList[index].motivo,
+                        widget.controller.firstLetterCapitalized(
+                          widget.pointsItemList[index].motivo,
                         ),
                         style: const TextStyle(),
                       ),
@@ -91,20 +93,19 @@ class _CardNameState extends State<CardName> {
                       width: 40,
                     ),
                     Text(
-                      '${controller.pointsPositivosString(widget.rankItemObjectList[index].pointsPositivos)} ${widget.rankItemObjectList[index].points}',
+                      '${widget.controller.pointsPositivosString(widget.pointsItemList[index].isPositivePoints)} ${widget.pointsItemList[index].points}',
                       style: TextStyle(
-                          color: widget.rankItemObjectList[index]
-                                      .pointsPositivos ==
-                                  true
-                              ? Colors.green
-                              : Colors.red,
+                          color:
+                              widget.pointsItemList[index].isPositivePoints ==
+                                      true
+                                  ? Colors.green
+                                  : Colors.red,
                           fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),
               );
             },
-            itemCount: widget.rankItemObjectList.length,
           ),
         )
       ],
