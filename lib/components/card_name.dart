@@ -1,4 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:nossos_pontos/controllers/home_controller.dart';
 import 'package:nossos_pontos/domain/points_item_model.dart';
@@ -22,6 +21,14 @@ class CardName extends StatefulWidget {
 
 class _CardNameState extends State<CardName> {
   bool expansionTileExpanded = false;
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -46,6 +53,12 @@ class _CardNameState extends State<CardName> {
       onExpansionChanged: (bool expanded) {
         setState(() {
           expansionTileExpanded = expanded;
+          if (expanded) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              _scrollController
+                  .jumpTo(_scrollController.position.maxScrollExtent);
+            });
+          }
         });
       },
       title: Container(
@@ -68,6 +81,7 @@ class _CardNameState extends State<CardName> {
         SizedBox(
           height: size.height * 0.5,
           child: ListView.separated(
+            controller: _scrollController,
             itemCount: widget.pointsItemList.length,
             separatorBuilder: (context, index) => Container(
               height: 3,
@@ -95,11 +109,9 @@ class _CardNameState extends State<CardName> {
                     Text(
                       '${widget.controller.pointsPositivosString(widget.pointsItemList[index].isPositivePoints)} ${widget.pointsItemList[index].points}',
                       style: TextStyle(
-                          color:
-                              widget.pointsItemList[index].isPositivePoints ==
-                                      true
-                                  ? Colors.green
-                                  : Colors.red,
+                          color: widget.pointsItemList[index].isPositivePoints
+                              ? Colors.green
+                              : Colors.red,
                           fontWeight: FontWeight.bold),
                     ),
                   ],
