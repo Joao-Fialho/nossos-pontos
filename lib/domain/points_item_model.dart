@@ -1,5 +1,5 @@
-class PointsItemList {
-  PointsItemList({
+class PointsItem {
+  PointsItem({
     required this.motivo,
     required this.points,
     required this.isPositivePoints,

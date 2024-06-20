@@ -5,13 +5,13 @@ import 'package:nossos_pontos/domain/points_item_model.dart';
 class CardName extends StatefulWidget {
   final String name;
   final int pointsTotal;
-  final List<PointsItemList> pointsItemList;
+  final List<PointsItem> pointsItem;
   final HomeController controller;
   const CardName({
     super.key,
     required this.name,
     required this.pointsTotal,
-    required this.pointsItemList,
+    required this.pointsItem,
     required this.controller,
   });
 
@@ -82,7 +82,7 @@ class _CardNameState extends State<CardName> {
           height: size.height * 0.5,
           child: ListView.separated(
             controller: _scrollController,
-            itemCount: widget.pointsItemList.length,
+            itemCount: widget.pointsItem.length,
             separatorBuilder: (context, index) => Container(
               height: 3,
               color: Colors.blue,
@@ -98,7 +98,7 @@ class _CardNameState extends State<CardName> {
                     Expanded(
                       child: Text(
                         widget.controller.firstLetterCapitalized(
-                          widget.pointsItemList[index].motivo,
+                          widget.pointsItem[index].motivo,
                         ),
                         style: const TextStyle(),
                       ),
@@ -107,9 +107,9 @@ class _CardNameState extends State<CardName> {
                       width: 40,
                     ),
                     Text(
-                      '${widget.controller.pointsPositivosString(widget.pointsItemList[index].isPositivePoints)} ${widget.pointsItemList[index].points}',
+                      '${widget.controller.pointsPositivosString(widget.pointsItem[index].isPositivePoints)} ${widget.pointsItem[index].points}',
                       style: TextStyle(
-                          color: widget.pointsItemList[index].isPositivePoints
+                          color: widget.pointsItem[index].isPositivePoints
                               ? Colors.green
                               : Colors.red,
                           fontWeight: FontWeight.bold),

@@ -87,7 +87,7 @@ class _HomePageState extends State<HomePage> {
                       CardName(
                         name: 'João',
                         pointsTotal: controller.somaPoints(),
-                        pointsItemList: controller.pointsItemList,
+                        pointsItem: controller.pointsItem,
                         controller: controller,
                       ),
                       const SizedBox(
@@ -96,7 +96,7 @@ class _HomePageState extends State<HomePage> {
                       CardName(
                         name: 'Kelly',
                         pointsTotal: controller.somaPoints(),
-                        pointsItemList: controller.pointsItemList,
+                        pointsItem: controller.pointsItem,
                         controller: controller,
                       ),
                     ],

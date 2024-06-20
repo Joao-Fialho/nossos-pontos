@@ -4,29 +4,29 @@ import 'package:nossos_pontos/domain/points_item_model.dart';
 class HomeController extends ChangeNotifier {
   ValueNotifier<bool> isVisibleModalPoint = ValueNotifier<bool>(false);
 
-  final List<PointsItemList> pointsItemList = [
-    PointsItemList(
+  final List<PointsItem> pointsItem = [
+    PointsItem(
       motivo:
           'teste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste teste',
       points: 100,
       isPositivePoints: false,
     ),
-    PointsItemList(
+    PointsItem(
       motivo: 'teste teste',
       points: 100,
       isPositivePoints: false,
     ),
-    PointsItemList(
+    PointsItem(
       motivo: 'teste teste',
       points: 100,
       isPositivePoints: true,
     ),
-    PointsItemList(
+    PointsItem(
       motivo: 'teste teste',
       points: 100,
       isPositivePoints: true,
     ),
-    PointsItemList(
+    PointsItem(
       motivo: 'teste teste',
       points: 100,
       isPositivePoints: true,
@@ -51,11 +51,11 @@ class HomeController extends ChangeNotifier {
 
   int somaPoints() {
     double totalPoint = 0;
-    for (var i = 0; i < pointsItemList.length; i++) {
-      if (pointsItemList[i].isPositivePoints == true) {
-        totalPoint = totalPoint + pointsItemList[i].points;
+    for (var i = 0; i < pointsItem.length; i++) {
+      if (pointsItem[i].isPositivePoints == true) {
+        totalPoint = totalPoint + pointsItem[i].points;
       } else {
-        totalPoint = totalPoint - pointsItemList[i].points;
+        totalPoint = totalPoint - pointsItem[i].points;
       }
     }
     return totalPoint.toInt();
@@ -66,18 +66,85 @@ class HomeController extends ChangeNotifier {
   }
 
   adicionarPoints(String motivo, int points, bool pointsPositivos) {
-    pointsItemList.add(
-      PointsItemList(
+    pointsItem.add(
+      PointsItem(
           motivo: motivo, points: points, isPositivePoints: pointsPositivos),
     );
     isVisibleModalPoint.value = false;
   }
 
   descontarPoints(String motivo, int points, bool pointsPositivos) {
-    pointsItemList.add(
-      PointsItemList(
+    pointsItem.add(
+      PointsItem(
           motivo: motivo, points: points, isPositivePoints: pointsPositivos),
     );
     isVisibleModalPoint.value = false;
   }
 }
+
+  // final List<PointsItemUser> pointsItemUser = [
+  //   PointsItemUser(
+  //     name: 'Joao',
+  //     pointsTotal: 123,
+  //     pointsItemList: [
+  //       PointsItem(
+  //         motivo:
+  //             'teste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste teste',
+  //         points: 100,
+  //         isPositivePoints: false,
+  //       ),
+  //       PointsItem(
+  //         motivo: 'teste teste',
+  //         points: 100,
+  //         isPositivePoints: false,
+  //       ),
+  //       PointsItem(
+  //         motivo: 'teste teste',
+  //         points: 100,
+  //         isPositivePoints: true,
+  //       ),
+  //       PointsItem(
+  //         motivo: 'teste teste',
+  //         points: 100,
+  //         isPositivePoints: true,
+  //       ),
+  //       PointsItem(
+  //         motivo: 'teste teste',
+  //         points: 100,
+  //         isPositivePoints: true,
+  //       ),
+  //     ],
+  //   ),
+  //   PointsItemUser(
+  //     name: 'kelly',
+  //     pointsTotal: 233,
+  //     pointsItemList: [
+  //       PointsItem(
+  //         motivo:
+  //             'teste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste teste',
+  //         points: 100,
+  //         isPositivePoints: false,
+  //       ),
+  //       PointsItem(
+  //         motivo: 'teste teste',
+  //         points: 100,
+  //         isPositivePoints: false,
+  //       ),
+  //       PointsItem(
+  //         motivo: 'teste teste',
+  //         points: 100,
+  //         isPositivePoints: true,
+  //       ),
+  //       PointsItem(
+  //         motivo: 'teste teste',
+  //         points: 100,
+  //         isPositivePoints: true,
+  //       ),
+  //       PointsItem(
+  //         motivo: 'teste teste',
+  //         points: 100,
+  //         isPositivePoints: true,
+  //       ),
+  //     ],
+  //   )
+  // ];
