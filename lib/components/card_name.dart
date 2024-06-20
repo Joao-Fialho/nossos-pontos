@@ -5,7 +5,7 @@ import 'package:nossos_pontos/domain/points_item_model.dart';
 class CardName extends StatefulWidget {
   final String name;
   final int pointsTotal;
-  final List<PointsItem> pointsItem;
+  final List<PointsItemModel> pointsItem;
   final HomeController controller;
   const CardName({
     super.key,

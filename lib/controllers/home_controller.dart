@@ -1,37 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:nossos_pontos/domain/points_item_model.dart';
+import 'package:nossos_pontos/domain/rank_item_datasource.dart';
+import 'package:nossos_pontos/domain/user_model.dart';
 
 class HomeController extends ChangeNotifier {
   ValueNotifier<bool> isVisibleModalPoint = ValueNotifier<bool>(false);
+  RankItemDatasource rankItemDatasource = RankItemDatasource();
 
-  final List<PointsItem> pointsItem = [
-    PointsItem(
-      motivo:
-          'teste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste teste',
-      points: 100,
-      isPositivePoints: false,
-    ),
-    PointsItem(
-      motivo: 'teste teste',
-      points: 100,
-      isPositivePoints: false,
-    ),
-    PointsItem(
-      motivo: 'teste teste',
-      points: 100,
-      isPositivePoints: true,
-    ),
-    PointsItem(
-      motivo: 'teste teste',
-      points: 100,
-      isPositivePoints: true,
-    ),
-    PointsItem(
-      motivo: 'teste teste',
-      points: 100,
-      isPositivePoints: true,
-    ),
-  ];
+  final List<PointsItemModel> pointsItem = [];
+  late List<UserModel> userList;
+
+  getUser() async {
+    return userList = await rankItemDatasource.getRankItem();
+  }
 
   void toggleVisibility() {
     isVisibleModalPoint.value = !isVisibleModalPoint.value;
@@ -67,7 +48,7 @@ class HomeController extends ChangeNotifier {
 
   adicionarPoints(String motivo, int points, bool pointsPositivos) {
     pointsItem.add(
-      PointsItem(
+      PointsItemModel(
           motivo: motivo, points: points, isPositivePoints: pointsPositivos),
     );
     isVisibleModalPoint.value = false;
@@ -75,76 +56,76 @@ class HomeController extends ChangeNotifier {
 
   descontarPoints(String motivo, int points, bool pointsPositivos) {
     pointsItem.add(
-      PointsItem(
+      PointsItemModel(
           motivo: motivo, points: points, isPositivePoints: pointsPositivos),
     );
     isVisibleModalPoint.value = false;
   }
 }
 
-  // final List<PointsItemUser> pointsItemUser = [
-  //   PointsItemUser(
-  //     name: 'Joao',
-  //     pointsTotal: 123,
-  //     pointsItemList: [
-  //       PointsItem(
-  //         motivo:
-  //             'teste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste teste',
-  //         points: 100,
-  //         isPositivePoints: false,
-  //       ),
-  //       PointsItem(
-  //         motivo: 'teste teste',
-  //         points: 100,
-  //         isPositivePoints: false,
-  //       ),
-  //       PointsItem(
-  //         motivo: 'teste teste',
-  //         points: 100,
-  //         isPositivePoints: true,
-  //       ),
-  //       PointsItem(
-  //         motivo: 'teste teste',
-  //         points: 100,
-  //         isPositivePoints: true,
-  //       ),
-  //       PointsItem(
-  //         motivo: 'teste teste',
-  //         points: 100,
-  //         isPositivePoints: true,
-  //       ),
-  //     ],
-  //   ),
-  //   PointsItemUser(
-  //     name: 'kelly',
-  //     pointsTotal: 233,
-  //     pointsItemList: [
-  //       PointsItem(
-  //         motivo:
-  //             'teste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste teste',
-  //         points: 100,
-  //         isPositivePoints: false,
-  //       ),
-  //       PointsItem(
-  //         motivo: 'teste teste',
-  //         points: 100,
-  //         isPositivePoints: false,
-  //       ),
-  //       PointsItem(
-  //         motivo: 'teste teste',
-  //         points: 100,
-  //         isPositivePoints: true,
-  //       ),
-  //       PointsItem(
-  //         motivo: 'teste teste',
-  //         points: 100,
-  //         isPositivePoints: true,
-  //       ),
-  //       PointsItem(
-  //         motivo: 'teste teste',
-  //         points: 100,
-  //         isPositivePoints: true,
-  //       ),
-  //     ],
-  //   )
-  // ];
+// final List<PointsItemUser> pointsItemUser = [
+//   PointsItemUser(
+//     name: 'Joao',
+//     pointsTotal: 123,
+//     pointsItemList: [
+//       PointsItem(
+//         motivo:
+//             'teste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste teste',
+//         points: 100,
+//         isPositivePoints: false,
+//       ),
+//       PointsItem(
+//         motivo: 'teste teste',
+//         points: 100,
+//         isPositivePoints: false,
+//       ),
+//       PointsItem(
+//         motivo: 'teste teste',
+//         points: 100,
+//         isPositivePoints: true,
+//       ),
+//       PointsItem(
+//         motivo: 'teste teste',
+//         points: 100,
+//         isPositivePoints: true,
+//       ),
+//       PointsItem(
+//         motivo: 'teste teste',
+//         points: 100,
+//         isPositivePoints: true,
+//       ),
+//     ],
+//   ),
+//   PointsItemUser(
+//     name: 'kelly',
+//     pointsTotal: 233,
+//     pointsItemList: [
+//       PointsItem(
+//         motivo:
+//             'teste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste teste',
+//         points: 100,
+//         isPositivePoints: false,
+//       ),
+//       PointsItem(
+//         motivo: 'teste teste',
+//         points: 100,
+//         isPositivePoints: false,
+//       ),
+//       PointsItem(
+//         motivo: 'teste teste',
+//         points: 100,
+//         isPositivePoints: true,
+//       ),
+//       PointsItem(
+//         motivo: 'teste teste',
+//         points: 100,
+//         isPositivePoints: true,
+//       ),
+//       PointsItem(
+//         motivo: 'teste teste',
+//         points: 100,
+//         isPositivePoints: true,
+//       ),
+//     ],
+//   )
+// ];

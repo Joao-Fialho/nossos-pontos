@@ -1,4 +1,4 @@
-package com.example.nossos_pontos
+package com.nossospontos.app
 
 import io.flutter.embedding.android.FlutterActivity
 

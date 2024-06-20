@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:nossos_pontos/components/card_name.dart';
 import 'package:nossos_pontos/components/points_modal.dart';
 import 'package:nossos_pontos/controllers/home_controller.dart';
+import 'package:nossos_pontos/domain/rank_item_datasource.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({
@@ -18,6 +19,9 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    // controller.userList.addListener(() {
+    //   setState(() {});
+    // });
     controller.isVisibleModalPoint.addListener(() {
       setState(() {}); // Atualiza a UI quando a visibilidade mudar
     });
@@ -84,21 +88,35 @@ class _HomePageState extends State<HomePage> {
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
                     children: [
-                      CardName(
-                        name: 'João',
-                        pointsTotal: controller.somaPoints(),
-                        pointsItem: controller.pointsItem,
-                        controller: controller,
+                      ListView.builder(
+                        itemCount: controller.getUser().length,
+                        itemBuilder: (BuildContext context, int index) {
+                          controller.userList;
+                          return CardName(
+                            name: controller.getUser()[index].name,
+                            pointsTotal:
+                                controller.getUser()[index].pointsTotal,
+                            pointsItem:
+                                controller.getUser()[index].pointsItemList,
+                            controller: controller,
+                          );
+                        },
                       ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      CardName(
-                        name: 'Kelly',
-                        pointsTotal: controller.somaPoints(),
-                        pointsItem: controller.pointsItem,
-                        controller: controller,
-                      ),
+                      // CardName(
+                      //   name: 'João',
+                      //   pointsTotal: controller.somaPoints(),
+                      //   pointsItem: controller.pointsItem,
+                      //   controller: controller,
+                      // ),
+                      // const SizedBox(
+                      //   height: 10,
+                      // ),
+                      // CardName(
+                      //   name: 'Kelly',
+                      //   pointsTotal: controller.somaPoints(),
+                      //   pointsItem: controller.pointsItem,
+                      //   controller: controller,
+                      // ),
                     ],
                   ),
                 ),
@@ -115,6 +133,7 @@ class _HomePageState extends State<HomePage> {
           backgroundColor: Colors.lightBlue.shade300,
           onPressed: () {
             setState(() {
+              RankItemDatasource().getRankItem();
               controller.toggleVisibility();
               //clica aqui e nao fecha o modal
             });
