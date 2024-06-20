@@ -131,14 +131,12 @@ class _PointsModalState extends State<PointsModal> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        setState(() {
-                          if (motivo.isNotEmpty && points != 0) {
-                            setState(() {
-                              widget.controller
-                                  .adicionarPoints(motivo, points, true);
-                            });
-                          }
-                        });
+                        if (motivo.isNotEmpty && points != 0) {
+                          setState(() {
+                            widget.controller
+                                .adicionarPoints(motivo, points, true);
+                          });
+                        }
                       },
                       child: Container(
                         padding: const EdgeInsets.all(11),

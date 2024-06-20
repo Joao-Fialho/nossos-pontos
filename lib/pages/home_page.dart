@@ -17,8 +17,18 @@ class _HomePageState extends State<HomePage> {
   var controller = HomeController();
   @override
   void initState() {
-    controller.isVisibleModalPoint = false;
     super.initState();
+    controller.isVisibleModalPoint.addListener(() {
+      setState(() {}); // Atualiza a UI quando a visibilidade mudar
+    });
+  }
+
+  @override
+  void dispose() {
+    controller.isVisibleModalPoint.removeListener(() {
+      setState(() {});
+    });
+    super.dispose();
   }
 
   @override
@@ -92,12 +102,10 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                 ),
-                Visibility(
-                  visible: controller.isVisibleModalPoint,
-                  child: PointsModal(
+                if (controller.isVisibleModalPoint.value)
+                  PointsModal(
                     controller: controller,
                   ),
-                ),
               ],
             ),
           ]),

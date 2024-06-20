@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:nossos_pontos/domain/points_item_model.dart';
 
 class HomeController extends ChangeNotifier {
-  late bool isVisibleModalPoint;
+  ValueNotifier<bool> isVisibleModalPoint = ValueNotifier<bool>(false);
 
   final List<PointsItemList> pointsItemList = [
     PointsItemList(
@@ -34,7 +34,7 @@ class HomeController extends ChangeNotifier {
   ];
 
   void toggleVisibility() {
-    isVisibleModalPoint = !isVisibleModalPoint;
+    isVisibleModalPoint.value = !isVisibleModalPoint.value;
   }
 
   String firstLetterCapitalized(String text) {
@@ -66,19 +66,18 @@ class HomeController extends ChangeNotifier {
   }
 
   adicionarPoints(String motivo, int points, bool pointsPositivos) {
-    toggleVisibility();
     pointsItemList.add(
       PointsItemList(
           motivo: motivo, points: points, isPositivePoints: pointsPositivos),
     );
+    isVisibleModalPoint.value = false;
   }
 
   descontarPoints(String motivo, int points, bool pointsPositivos) {
-    toggleVisibility();
-
     pointsItemList.add(
       PointsItemList(
           motivo: motivo, points: points, isPositivePoints: pointsPositivos),
     );
+    isVisibleModalPoint.value = false;
   }
 }
