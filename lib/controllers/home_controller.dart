@@ -1,21 +1,34 @@
-import 'package:flutter/material.dart';
+import 'package:mobx/mobx.dart';
 import 'package:nossos_pontos/domain/points_item_model.dart';
 import 'package:nossos_pontos/domain/rank_item_datasource.dart';
 import 'package:nossos_pontos/domain/user_model.dart';
 
-class HomeController extends ChangeNotifier {
-  ValueNotifier<bool> isVisibleModalPoint = ValueNotifier<bool>(false);
+part 'home_controller.g.dart';
+
+class HomeController = _HomeController with _$HomeController;
+
+abstract class _HomeController with Store {
   RankItemDatasource rankItemDatasource = RankItemDatasource();
-
   final List<PointsItemModel> pointsItem = [];
-  late List<UserModel> userList;
 
+  @observable
+  ObservableList<UserModel> userList = <UserModel>[].asObservable();
+
+  @action
   getUser() async {
-    return userList = await rankItemDatasource.getRankItem();
+    var list = await rankItemDatasource.getRankItem();
+    print(userList);
+    for (var i = 0; i < list.length; i++) {
+      userList.add(list[i]);
+    }
+    return userList;
   }
 
+  @observable
+  bool isVisibleModalPoint = false;
+  @action
   void toggleVisibility() {
-    isVisibleModalPoint.value = !isVisibleModalPoint.value;
+    isVisibleModalPoint = !isVisibleModalPoint;
   }
 
   String firstLetterCapitalized(String text) {
@@ -51,7 +64,7 @@ class HomeController extends ChangeNotifier {
       PointsItemModel(
           motivo: motivo, points: points, isPositivePoints: pointsPositivos),
     );
-    isVisibleModalPoint.value = false;
+    isVisibleModalPoint = false;
   }
 
   descontarPoints(String motivo, int points, bool pointsPositivos) {
@@ -59,7 +72,7 @@ class HomeController extends ChangeNotifier {
       PointsItemModel(
           motivo: motivo, points: points, isPositivePoints: pointsPositivos),
     );
-    isVisibleModalPoint.value = false;
+    isVisibleModalPoint = false;
   }
 }
 

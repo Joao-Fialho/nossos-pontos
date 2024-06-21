@@ -1,10 +1,10 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:nossos_pontos/components/card_name.dart';
 import 'package:nossos_pontos/components/points_modal.dart';
 import 'package:nossos_pontos/controllers/home_controller.dart';
-import 'package:nossos_pontos/domain/rank_item_datasource.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({
@@ -19,20 +19,12 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    // controller.userList.addListener(() {
-    //   setState(() {});
-    // });
-    controller.isVisibleModalPoint.addListener(() {
-      setState(() {}); // Atualiza a UI quando a visibilidade mudar
-    });
-  }
 
-  @override
-  void dispose() {
-    controller.isVisibleModalPoint.removeListener(() {
-      setState(() {});
+    setState(() {
+      controller.isVisibleModalPoint = false;
+      controller.getUser();
     });
-    super.dispose();
+    print(controller.userList);
   }
 
   @override
@@ -88,17 +80,20 @@ class _HomePageState extends State<HomePage> {
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
                     children: [
-                      ListView.builder(
-                        itemCount: controller.getUser().length,
-                        itemBuilder: (BuildContext context, int index) {
-                          controller.userList;
-                          return CardName(
-                            name: controller.getUser()[index].name,
-                            pointsTotal:
-                                controller.getUser()[index].pointsTotal,
-                            pointsItem:
-                                controller.getUser()[index].pointsItemList,
-                            controller: controller,
+                      Observer(
+                        builder: (context) {
+                          return ListView.builder(
+                            itemCount: controller.userList.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return CardName(
+                                name: controller.userList[index].name,
+                                pointsTotal:
+                                    controller.userList[index].pointsTotal,
+                                pointsItem:
+                                    controller.userList[index].pointsItemList,
+                                controller: controller,
+                              );
+                            },
                           );
                         },
                       ),
@@ -120,10 +115,15 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                 ),
-                if (controller.isVisibleModalPoint.value)
-                  PointsModal(
-                    controller: controller,
-                  ),
+                Observer(builder: (context) {
+                  if (controller.isVisibleModalPoint) {
+                    return PointsModal(
+                      controller: controller,
+                    );
+                  } else {
+                    return Container();
+                  }
+                })
               ],
             ),
           ]),
@@ -133,7 +133,7 @@ class _HomePageState extends State<HomePage> {
           backgroundColor: Colors.lightBlue.shade300,
           onPressed: () {
             setState(() {
-              RankItemDatasource().getRankItem();
+              // RankItemDatasource().getRankItem();
               controller.toggleVisibility();
               //clica aqui e nao fecha o modal
             });
