@@ -13,7 +13,6 @@ abstract class _HomeController with Store {
   }
 
   RankItemDatasource rankItemDatasource = RankItemDatasource();
-  final List<PointsItemModel> pointsItem = [];
 
   @observable
   ObservableList<UserModel> userList = ObservableList<UserModel>();
@@ -24,12 +23,12 @@ abstract class _HomeController with Store {
     return userList;
   }
 
-  @action
-  setPoints() async {
-    toggleVisibility();
-    // userList = (await rankItemDatasource.getRankItem()).asObservable();
-    // return userList;
-  }
+  // @action
+  // setPoints() async {
+  //   toggleVisibility();
+  //   // userList = (await rankItemDatasource.getRankItem()).asObservable();
+  //   // return userList;
+  // }
 
   @observable
   Observable<bool> isVisibleModalPoint = false.obs();
@@ -54,36 +53,24 @@ abstract class _HomeController with Store {
     }
   }
 
-  int somaPoints() {
-    double totalPoint = 0;
-    for (var i = 0; i < pointsItem.length; i++) {
-      if (pointsItem[i].isPositivePoints == true) {
-        totalPoint = totalPoint + pointsItem[i].points;
-      } else {
-        totalPoint = totalPoint - pointsItem[i].points;
+  setPoints(String user, int points, bool isPositivePoints, String motivo) {
+    int totalPoint = 0;
+
+    for (var i = 0; i < userList.length; i++) {
+      if (user == userList[i].name) {
+        totalPoint = (points + userList[i].pointsTotal).toInt();
+        rankItemDatasource.setPointsFirebase(
+          totalPoint,
+          i,
+          PointsItemModel(
+              motivo: motivo,
+              points: points,
+              isPositivePoints: isPositivePoints),
+        );
       }
     }
-    return totalPoint.toInt();
-  }
-
-  List getListPoints() {
-    return [];
-  }
-
-  adicionarPoints(String motivo, int points, bool pointsPositivos) {
-    pointsItem.add(
-      PointsItemModel(
-          motivo: motivo, points: points, isPositivePoints: pointsPositivos),
-    );
-    setPoints();
-  }
-
-  descontarPoints(String motivo, int points, bool pointsPositivos) {
-    pointsItem.add(
-      PointsItemModel(
-          motivo: motivo, points: points, isPositivePoints: pointsPositivos),
-    );
-    setPoints();
+    toggleVisibility();
+    getUser();
   }
 }
 

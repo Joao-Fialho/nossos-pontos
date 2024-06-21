@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:nossos_pontos/domain/points_item_model.dart';
 import 'package:nossos_pontos/domain/user_adapter.dart';
 import 'package:nossos_pontos/domain/user_model.dart';
 
@@ -27,6 +28,26 @@ class RankItemDatasource {
     final user = await Future.wait(userList);
 
     return user;
+  }
+
+  setPointsFirebase(
+      int totalPoint, int userIndex, PointsItemModel pointsItemModel) async {
+    final pointsItemUserCollection = db.collection("PointsItemUser");
+    final dataUser = <String, dynamic>{
+      "name": "Kellyquinha",
+      "pointsItemList": "/01/pointsItemList",
+      "pointsTotal": totalPoint,
+    };
+    final dataPoints = <String, dynamic>{
+      "isPositivePoints": pointsItemModel.isPositivePoints,
+      "motivo": pointsItemModel.motivo,
+      "points": pointsItemModel.points,
+    };
+    pointsItemUserCollection.doc('02').set(dataUser);
+    final userMap = (await pointsItemUserCollection.get()).docs[userIndex];
+
+    userMap.reference.collection('pointsItemList').add(dataPoints);
+    // var teste = userMap.setProperty("pointsTotal", totalPoint);
   }
 }
 

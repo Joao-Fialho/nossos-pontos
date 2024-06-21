@@ -87,7 +87,7 @@ class _CardNameState extends State<CardName> {
               height: 3,
               color: Colors.blue,
             ),
-            reverse: true,
+            // reverse: true,
             itemBuilder: (BuildContext context, int index) {
               return Container(
                 color: Colors.white,

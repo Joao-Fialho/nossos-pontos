@@ -64,23 +64,21 @@ class _HomePageState extends State<HomePage> {
                   const EdgeInsets.only(bottom: 80, left: 8, right: 8, top: 8),
               child: Observer(
                 builder: (context) {
-                  return Expanded(
-                    child: ListView.separated(
-                      itemCount: controller.userList.length,
-                      separatorBuilder: (context, index) {
-                        return SizedBox(
-                          height: 10,
-                        );
-                      },
-                      itemBuilder: (BuildContext context, int index) {
-                        return CardName(
-                          name: controller.userList[index].name,
-                          pointsTotal: controller.userList[index].pointsTotal,
-                          pointsItem: controller.userList[index].pointsItemList,
-                          controller: controller,
-                        );
-                      },
-                    ),
+                  return ListView.separated(
+                    itemCount: controller.userList.length,
+                    separatorBuilder: (context, index) {
+                      return const SizedBox(
+                        height: 10,
+                      );
+                    },
+                    itemBuilder: (BuildContext context, int index) {
+                      return CardName(
+                        name: controller.userList[index].name,
+                        pointsTotal: controller.userList[index].pointsTotal,
+                        pointsItem: controller.userList[index].pointsItemList,
+                        controller: controller,
+                      );
+                    },
                   );
                 },
               ),
@@ -95,25 +93,23 @@ class _HomePageState extends State<HomePage> {
                   }
                 });
               },
-              child: Expanded(
-                child: Observer(builder: (context) {
-                  if (controller.isVisibleModalPoint.value == true) {
-                    return WillPopScope(
-                      onWillPop: () async {
-                        controller.toggleVisibility();
-                        return false;
-                      },
-                      child: ListView(children: [
-                        PointsModal(
-                          controller: controller,
-                        ),
-                      ]),
-                    );
-                  } else {
-                    return Container();
-                  }
-                }),
-              ),
+              child: Observer(builder: (context) {
+                if (controller.isVisibleModalPoint.value == true) {
+                  return WillPopScope(
+                    onWillPop: () async {
+                      controller.toggleVisibility();
+                      return false;
+                    },
+                    child: ListView(children: [
+                      PointsModal(
+                        controller: controller,
+                      ),
+                    ]),
+                  );
+                } else {
+                  return Container();
+                }
+              }),
             )
           ],
         ),

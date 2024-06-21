@@ -65,14 +65,6 @@ mixin _$HomeController on _HomeController, Store {
     return _$getUserAsyncAction.run(() => super.getUser());
   }
 
-  late final _$setPointsAsyncAction =
-      AsyncAction('_HomeController.setPoints', context: context);
-
-  @override
-  Future setPoints() {
-    return _$setPointsAsyncAction.run(() => super.setPoints());
-  }
-
   late final _$_HomeControllerActionController =
       ActionController(name: '_HomeController', context: context);
 
