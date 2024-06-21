@@ -34,7 +34,7 @@ class RankItemDatasource {
       int totalPoint, int userIndex, PointsItemModel pointsItemModel) async {
     final pointsItemUserCollection = db.collection("PointsItemUser");
     final dataUser = <String, dynamic>{
-      "name": "Kellyquinha",
+      "name": "Jhonzin",
       "pointsItemList": "/01/pointsItemList",
       "pointsTotal": totalPoint,
     };
@@ -43,7 +43,7 @@ class RankItemDatasource {
       "motivo": pointsItemModel.motivo,
       "points": pointsItemModel.points,
     };
-    pointsItemUserCollection.doc('02').set(dataUser);
+    pointsItemUserCollection.doc('01').set(dataUser);
     final userMap = (await pointsItemUserCollection.get()).docs[userIndex];
 
     userMap.reference.collection('pointsItemList').add(dataPoints);

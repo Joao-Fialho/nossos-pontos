@@ -58,7 +58,11 @@ abstract class _HomeController with Store {
 
     for (var i = 0; i < userList.length; i++) {
       if (user == userList[i].name) {
-        totalPoint = (points + userList[i].pointsTotal).toInt();
+        if (isPositivePoints == true) {
+          totalPoint = (points + userList[i].pointsTotal).toInt();
+        } else {
+          totalPoint = (points - userList[i].pointsTotal).toInt();
+        }
         rankItemDatasource.setPointsFirebase(
           totalPoint,
           i,

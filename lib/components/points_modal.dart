@@ -111,8 +111,8 @@ class _PointsModalState extends State<PointsModal> {
                       onTap: () {
                         setState(() {
                           if (motivo.isNotEmpty && points != 0) {
-                            widget.controller.setPoints(
-                                'Kellyquinha', points, false, motivo);
+                            widget.controller
+                                .setPoints('Jhonzin', points, false, motivo);
                           }
                         });
                       },
@@ -134,7 +134,7 @@ class _PointsModalState extends State<PointsModal> {
                         if (motivo.isNotEmpty && points != 0) {
                           setState(() {
                             widget.controller
-                                .setPoints('Kellyquinha', points, true, motivo);
+                                .setPoints('Jhonzin', points, true, motivo);
                           });
                         }
                       },
