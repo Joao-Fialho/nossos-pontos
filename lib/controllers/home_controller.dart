@@ -8,27 +8,38 @@ part 'home_controller.g.dart';
 class HomeController = _HomeController with _$HomeController;
 
 abstract class _HomeController with Store {
+  _HomeController() {
+    getUser();
+  }
+
   RankItemDatasource rankItemDatasource = RankItemDatasource();
   final List<PointsItemModel> pointsItem = [];
 
   @observable
-  ObservableList<UserModel> userList = <UserModel>[].asObservable();
+  ObservableList<UserModel> userList = ObservableList<UserModel>();
 
   @action
   getUser() async {
-    var list = await rankItemDatasource.getRankItem();
-    print(userList);
-    for (var i = 0; i < list.length; i++) {
-      userList.add(list[i]);
-    }
+    userList = (await rankItemDatasource.getUserFirebase()).asObservable();
     return userList;
   }
 
+  @action
+  setPoints() async {
+    toggleVisibility();
+    // userList = (await rankItemDatasource.getRankItem()).asObservable();
+    // return userList;
+  }
+
   @observable
-  bool isVisibleModalPoint = false;
+  Observable<bool> isVisibleModalPoint = false.obs();
+
+  @observable
+  Observable<bool> backButtonPressed = false.obs();
+
   @action
   void toggleVisibility() {
-    isVisibleModalPoint = !isVisibleModalPoint;
+    isVisibleModalPoint = (!isVisibleModalPoint.value).obs();
   }
 
   String firstLetterCapitalized(String text) {
@@ -64,7 +75,7 @@ abstract class _HomeController with Store {
       PointsItemModel(
           motivo: motivo, points: points, isPositivePoints: pointsPositivos),
     );
-    isVisibleModalPoint = false;
+    setPoints();
   }
 
   descontarPoints(String motivo, int points, bool pointsPositivos) {
@@ -72,7 +83,7 @@ abstract class _HomeController with Store {
       PointsItemModel(
           motivo: motivo, points: points, isPositivePoints: pointsPositivos),
     );
-    isVisibleModalPoint = false;
+    setPoints();
   }
 }
 

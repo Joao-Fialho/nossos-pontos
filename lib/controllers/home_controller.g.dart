@@ -29,20 +29,31 @@ mixin _$HomeController on _HomeController, Store {
       Atom(name: '_HomeController.isVisibleModalPoint', context: context);
 
   @override
-  bool get isVisibleModalPoint {
+  Observable<bool> get isVisibleModalPoint {
     _$isVisibleModalPointAtom.reportRead();
     return super.isVisibleModalPoint;
   }
 
-  bool _isVisibleModalPointIsInitialized = false;
+  @override
+  set isVisibleModalPoint(Observable<bool> value) {
+    _$isVisibleModalPointAtom.reportWrite(value, super.isVisibleModalPoint, () {
+      super.isVisibleModalPoint = value;
+    });
+  }
+
+  late final _$backButtonPressedAtom =
+      Atom(name: '_HomeController.backButtonPressed', context: context);
 
   @override
-  set isVisibleModalPoint(bool value) {
-    _$isVisibleModalPointAtom.reportWrite(value,
-        _isVisibleModalPointIsInitialized ? super.isVisibleModalPoint : null,
-        () {
-      super.isVisibleModalPoint = value;
-      _isVisibleModalPointIsInitialized = true;
+  Observable<bool> get backButtonPressed {
+    _$backButtonPressedAtom.reportRead();
+    return super.backButtonPressed;
+  }
+
+  @override
+  set backButtonPressed(Observable<bool> value) {
+    _$backButtonPressedAtom.reportWrite(value, super.backButtonPressed, () {
+      super.backButtonPressed = value;
     });
   }
 
@@ -52,6 +63,14 @@ mixin _$HomeController on _HomeController, Store {
   @override
   Future getUser() {
     return _$getUserAsyncAction.run(() => super.getUser());
+  }
+
+  late final _$setPointsAsyncAction =
+      AsyncAction('_HomeController.setPoints', context: context);
+
+  @override
+  Future setPoints() {
+    return _$setPointsAsyncAction.run(() => super.setPoints());
   }
 
   late final _$_HomeControllerActionController =
@@ -72,7 +91,8 @@ mixin _$HomeController on _HomeController, Store {
   String toString() {
     return '''
 userList: ${userList},
-isVisibleModalPoint: ${isVisibleModalPoint}
+isVisibleModalPoint: ${isVisibleModalPoint},
+backButtonPressed: ${backButtonPressed}
     ''';
   }
 }

@@ -16,132 +16,119 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   var controller = HomeController();
-  @override
-  void initState() {
-    super.initState();
-
-    setState(() {
-      controller.isVisibleModalPoint = false;
-      controller.getUser();
-    });
-    print(controller.userList);
-  }
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          FocusScope.of(context).requestFocus(FocusNode());
-        });
-      },
-      child: Scaffold(
-        backgroundColor: Colors.grey.shade900,
-        appBar: AppBar(
-          backgroundColor: Colors.lightBlue.shade300,
-          title: const Text(
-            'Nossos Pontos',
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w400),
-          ),
+    return Scaffold(
+      backgroundColor: Colors.grey.shade900,
+      appBar: AppBar(
+        backgroundColor: Colors.lightBlue.shade300,
+        title: const Text(
+          'Nossos Pontos',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w400),
         ),
-        body: SizedBox(
-          height: size.height,
-          width: size.width,
-          child: ListView(children: [
-            Stack(
-              children: [
-                SizedBox(
-                  height: size.height,
-                  width: size.width,
-                  child: Stack(
-                    children: [
-                      SizedBox(
-                        height: size.height,
-                        width: size.width,
-                        child: Image.asset(
-                          'assets/background_image.jpg',
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      Positioned.fill(
-                        child: BackdropFilter(
-                          filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
-                          child: Container(
-                            color: Colors.grey.withOpacity(0.1),
-                          ),
-                        ),
-                      ),
-                    ],
+      ),
+      body: SizedBox(
+        height: size.height,
+        width: size.width,
+        child: Stack(
+          children: [
+            SizedBox(
+              height: size.height,
+              width: size.width,
+              child: Stack(
+                children: [
+                  Container(
+                    height: size.height,
+                    width: size.width,
+                    child: Image.asset(
+                      'assets/background_image.jpg',
+                      fit: BoxFit.cover,
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    children: [
-                      Observer(
-                        builder: (context) {
-                          return ListView.builder(
-                            itemCount: controller.userList.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return CardName(
-                                name: controller.userList[index].name,
-                                pointsTotal:
-                                    controller.userList[index].pointsTotal,
-                                pointsItem:
-                                    controller.userList[index].pointsItemList,
-                                controller: controller,
-                              );
-                            },
-                          );
-                        },
+                  Positioned.fill(
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
+                      child: Container(
+                        color: Colors.grey.withOpacity(0.1),
                       ),
-                      // CardName(
-                      //   name: 'João',
-                      //   pointsTotal: controller.somaPoints(),
-                      //   pointsItem: controller.pointsItem,
-                      //   controller: controller,
-                      // ),
-                      // const SizedBox(
-                      //   height: 10,
-                      // ),
-                      // CardName(
-                      //   name: 'Kelly',
-                      //   pointsTotal: controller.somaPoints(),
-                      //   pointsItem: controller.pointsItem,
-                      //   controller: controller,
-                      // ),
-                    ],
+                    ),
                   ),
-                ),
-                Observer(builder: (context) {
-                  if (controller.isVisibleModalPoint) {
-                    return PointsModal(
-                      controller: controller,
+                ],
+              ),
+            ),
+            Padding(
+              padding:
+                  const EdgeInsets.only(bottom: 80, left: 8, right: 8, top: 8),
+              child: Observer(
+                builder: (context) {
+                  return Expanded(
+                    child: ListView.separated(
+                      itemCount: controller.userList.length,
+                      separatorBuilder: (context, index) {
+                        return SizedBox(
+                          height: 10,
+                        );
+                      },
+                      itemBuilder: (BuildContext context, int index) {
+                        return CardName(
+                          name: controller.userList[index].name,
+                          pointsTotal: controller.userList[index].pointsTotal,
+                          pointsItem: controller.userList[index].pointsItemList,
+                          controller: controller,
+                        );
+                      },
+                    ),
+                  );
+                },
+              ),
+            ),
+            GestureDetector(
+              onTap: () {
+                setState(() {
+                  if (MediaQuery.of(context).viewInsets.bottom == 0) {
+                    controller.toggleVisibility();
+                  } else {
+                    FocusScope.of(context).requestFocus(FocusNode());
+                  }
+                });
+              },
+              child: Expanded(
+                child: Observer(builder: (context) {
+                  if (controller.isVisibleModalPoint.value == true) {
+                    return WillPopScope(
+                      onWillPop: () async {
+                        controller.toggleVisibility();
+                        return false;
+                      },
+                      child: ListView(children: [
+                        PointsModal(
+                          controller: controller,
+                        ),
+                      ]),
                     );
                   } else {
                     return Container();
                   }
-                })
-              ],
-            ),
-          ]),
+                }),
+              ),
+            )
+          ],
         ),
-        floatingActionButton: FloatingActionButton(
-          splashColor: Colors.blue,
-          backgroundColor: Colors.lightBlue.shade300,
-          onPressed: () {
-            setState(() {
-              // RankItemDatasource().getRankItem();
-              controller.toggleVisibility();
-              //clica aqui e nao fecha o modal
-            });
-          },
-          child: const Icon(
-            Icons.mode_edit_sharp,
-            color: Colors.white,
-          ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        splashColor: Colors.blue,
+        backgroundColor: Colors.lightBlue.shade300,
+        onPressed: () {
+          setState(() {
+            controller.toggleVisibility();
+          });
+        },
+        child: const Icon(
+          Icons.mode_edit_sharp,
+          color: Colors.white,
         ),
       ),
     );

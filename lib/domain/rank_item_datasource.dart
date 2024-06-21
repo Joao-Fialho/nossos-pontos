@@ -6,7 +6,7 @@ class RankItemDatasource {
   var db = FirebaseFirestore.instance;
   UserAdapter userAdapter = UserAdapter();
 
-  Future<List<UserModel>> getRankItem() async {
+  Future<List<UserModel>> getUserFirebase() async {
     final pointsItemUserCollection = db.collection("PointsItemUser");
 
     final userMap = (await pointsItemUserCollection.get()).docs;
@@ -29,6 +29,7 @@ class RankItemDatasource {
     return user;
   }
 }
+
 
 
 
