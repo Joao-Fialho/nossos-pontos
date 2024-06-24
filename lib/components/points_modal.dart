@@ -1,6 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:nossos_pontos/controllers/home_controller.dart';
+import 'package:nossos_pontos/domain/user_model.dart';
 
 class PointsModal extends StatefulWidget {
   final HomeController controller;
@@ -42,6 +44,36 @@ class _PointsModalState extends State<PointsModal> {
               children: [
                 Column(
                   children: [
+                    Observer(
+                      builder: (context) {
+                        return DropdownButton<String>(
+                          value: widget.controller.selectedUser,
+                          dropdownColor: Colors.blueAccent,
+                          icon: const Icon(Icons.arrow_drop_down_rounded,
+                              color: Colors.white),
+                          iconSize: 30,
+                          elevation: 16,
+                          style: const TextStyle(color: Colors.white),
+                          borderRadius: BorderRadius.circular(10),
+                          underline: Container(
+                            height: 2,
+                            color: Colors.white,
+                          ),
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              widget.controller.selectedUser = newValue!;
+                            });
+                          },
+                          items: widget.controller.userList
+                              .map<DropdownMenuItem<String>>((UserModel user) {
+                            return DropdownMenuItem<String>(
+                              value: user.name,
+                              child: Text(user.name),
+                            );
+                          }).toList(),
+                        );
+                      },
+                    ),
                     TextFormField(
                       style: const TextStyle(color: Colors.white, fontSize: 15),
                       maxLines: 5,
@@ -111,8 +143,7 @@ class _PointsModalState extends State<PointsModal> {
                       onTap: () {
                         setState(() {
                           if (motivo.isNotEmpty && points != 0) {
-                            widget.controller
-                                .setPoints('Jhonzin', points, false, motivo);
+                            widget.controller.setPoints(points, false, motivo);
                           }
                         });
                       },
@@ -133,8 +164,7 @@ class _PointsModalState extends State<PointsModal> {
                       onTap: () {
                         if (motivo.isNotEmpty && points != 0) {
                           setState(() {
-                            widget.controller
-                                .setPoints('Jhonzin', points, true, motivo);
+                            widget.controller.setPoints(points, true, motivo);
                           });
                         }
                       },

@@ -55,8 +55,7 @@ class _CardNameState extends State<CardName> {
           expansionTileExpanded = expanded;
           if (expanded) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
-              _scrollController
-                  .jumpTo(_scrollController.position.maxScrollExtent);
+              _scrollController.jumpTo(0); // Rola para o topo
             });
           }
         });
@@ -87,7 +86,6 @@ class _CardNameState extends State<CardName> {
               height: 3,
               color: Colors.blue,
             ),
-            // reverse: true,
             itemBuilder: (BuildContext context, int index) {
               return Container(
                 color: Colors.white,

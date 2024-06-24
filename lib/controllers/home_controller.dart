@@ -17,9 +17,13 @@ abstract class _HomeController with Store {
   @observable
   ObservableList<UserModel> userList = ObservableList<UserModel>();
 
+  @observable
+  String selectedUser = '';
+
   @action
   getUser() async {
     userList = (await rankItemDatasource.getUserFirebase()).asObservable();
+    selectedUser = userList.first.name;
     return userList;
   }
 
@@ -53,17 +57,17 @@ abstract class _HomeController with Store {
     }
   }
 
-  setPoints(String user, int points, bool isPositivePoints, String motivo) {
+  setPoints(int points, bool isPositivePoints, String motivo) {
     int totalPoint = 0;
-
     for (var i = 0; i < userList.length; i++) {
-      if (user == userList[i].name) {
+      if (selectedUser == userList[i].name) {
         if (isPositivePoints == true) {
           totalPoint = (points + userList[i].pointsTotal).toInt();
         } else {
-          totalPoint = (points - userList[i].pointsTotal).toInt();
+          totalPoint = (userList[i].pointsTotal - points).toInt();
         }
         rankItemDatasource.setPointsFirebase(
+          selectedUser,
           totalPoint,
           i,
           PointsItemModel(

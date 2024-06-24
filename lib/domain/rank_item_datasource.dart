@@ -13,8 +13,12 @@ class RankItemDatasource {
     final userMap = (await pointsItemUserCollection.get()).docs;
     final userList = userMap.map(
       (e) async {
-        final pointsItemDocs =
-            (await e.reference.collection('pointsItemList').get()).docs.map(
+        final pointsItemDocs = (await e.reference
+                .collection('pointsItemList')
+                .orderBy('createdAt', descending: true)
+                .get())
+            .docs
+            .map(
           (e) {
             return e.data();
           },
@@ -30,20 +34,21 @@ class RankItemDatasource {
     return user;
   }
 
-  setPointsFirebase(
-      int totalPoint, int userIndex, PointsItemModel pointsItemModel) async {
+  setPointsFirebase(String user, int totalPoint, int userIndex,
+      PointsItemModel pointsItemModel) async {
     final pointsItemUserCollection = db.collection("PointsItemUser");
     final dataUser = <String, dynamic>{
-      "name": "Jhonzin",
-      "pointsItemList": "/01/pointsItemList",
+      "name": user,
+      "pointsItemList": "/0$userIndex/pointsItemList",
       "pointsTotal": totalPoint,
     };
     final dataPoints = <String, dynamic>{
       "isPositivePoints": pointsItemModel.isPositivePoints,
       "motivo": pointsItemModel.motivo,
       "points": pointsItemModel.points,
+      'createdAt': FieldValue.serverTimestamp(),
     };
-    pointsItemUserCollection.doc('01').set(dataUser);
+    pointsItemUserCollection.doc('0$userIndex').set(dataUser);
     final userMap = (await pointsItemUserCollection.get()).docs[userIndex];
 
     userMap.reference.collection('pointsItemList').add(dataPoints);
