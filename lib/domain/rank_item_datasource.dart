@@ -1,17 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:nossos_pontos/domain/points_item_model.dart';
-import 'package:nossos_pontos/domain/user_adapter.dart';
-import 'package:nossos_pontos/domain/user_model.dart';
+import 'package:nossos_pontos/domain/mappers/user_adapter.dart';
+import 'package:nossos_pontos/domain/models/points_item_model.dart';
+import 'package:nossos_pontos/domain/models/user_model.dart';
 
 class RankItemDatasource {
-  var db = FirebaseFirestore.instance;
+  FirebaseFirestore db = FirebaseFirestore.instance;
   UserAdapter userAdapter = UserAdapter();
 
   Future<List<UserModel>> getUserFirebase() async {
     final pointsItemUserCollection = db.collection("PointsItemUser");
+    final userDoc = (await pointsItemUserCollection.get()).docs;
 
-    final userMap = (await pointsItemUserCollection.get()).docs;
-    final userList = userMap.map(
+    final userList = userDoc.map(
       (e) async {
         final pointsItemDocs = (await e.reference
                 .collection('pointsItemList')
@@ -29,6 +29,7 @@ class RankItemDatasource {
         return userAdapter.fromMap(pointsItemList);
       },
     ).toList();
+
     final user = await Future.wait(userList);
 
     return user;
@@ -52,7 +53,6 @@ class RankItemDatasource {
     final userMap = (await pointsItemUserCollection.get()).docs[userIndex];
 
     userMap.reference.collection('pointsItemList').add(dataPoints);
-    // var teste = userMap.setProperty("pointsTotal", totalPoint);
   }
 }
 
