@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nossos_pontos/controllers/home_controller.dart';
-import 'package:nossos_pontos/domain/points_item_model.dart';
+import 'package:nossos_pontos/domain/models/points_item_model.dart';
 
 class CardName extends StatefulWidget {
   final String name;
@@ -93,6 +93,11 @@ class _CardNameState extends State<CardName> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+                    IconButton(
+                        //onPressed: widget.controller.editMotivo(
+                          //  widget.name, widget.pointsTotal, widget.),
+                        onPressed: (){},
+                        icon: Icon(Icons.mode_edit_rounded)),
                     Expanded(
                       child: Text(
                         widget.controller.firstLetterCapitalized(

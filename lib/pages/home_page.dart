@@ -61,7 +61,7 @@ class _HomePageState extends State<HomePage> {
             ),
             Padding(
               padding:
-                  const EdgeInsets.only(bottom: 80, left: 8, right: 8, top: 8),
+                  const EdgeInsets.only(bottom: 0, left: 8, right: 8, top: 8),
               child: Observer(
                 builder: (context) {
                   return ListView.separated(
@@ -100,11 +100,11 @@ class _HomePageState extends State<HomePage> {
                       controller.toggleVisibility();
                       return false;
                     },
-                    child: ListView(children: [
-                      PointsModal(
+                    child: Expanded(
+                      child: PointsModal(
                         controller: controller,
                       ),
-                    ]),
+                    ),
                   );
                 } else {
                   return Container();
@@ -119,14 +119,110 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Colors.lightBlue.shade300,
         onPressed: () {
           setState(() {
-            controller.toggleVisibility();
+            // controller.toggleVisibility();
+            showPointsModal(context, controller);
           });
+          // Modular.to.navigate('/pointsModal', arguments: controller);
         },
         child: const Icon(
           Icons.mode_edit_sharp,
           color: Colors.white,
         ),
       ),
+      bottomNavigationBar: ClipRRect(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        child: BottomAppBar(
+          color: Colors.lightBlue.shade300,
+          child: LayoutBuilder(builder: (context, constraints) {
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  height: constraints.maxHeight,
+                  width: constraints.maxWidth * 0.3,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Container(
+                        child: const Icon(
+                          Icons.today_rounded,
+                          color: Colors.white,
+                          size: 30,
+                        ),
+                      ),
+                      const Text(
+                        'Lembretes',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  height: constraints.maxHeight,
+                  width: constraints.maxWidth * 0.3,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Container(
+                        child: const Icon(
+                          Icons.graphic_eq,
+                          color: Colors.white,
+                          size: 30,
+                        ),
+                      ),
+                      const Text(
+                        'Pontos',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  height: constraints.maxHeight,
+                  width: constraints.maxWidth * 0.3,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Container(
+                        child: const Icon(
+                          Icons.perm_device_information,
+                          color: Colors.white,
+                          size: 30,
+                        ),
+                      ),
+                      const Text(
+                        'Informaçoes',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            );
+          }),
+        ),
+      ),
     );
   }
+}
+
+void showPointsModal(BuildContext context, HomeController controller) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return Dialog(
+        backgroundColor: Colors.transparent,
+        child: PointsModal(controller: controller),
+      );
+    },
+  );
 }

@@ -1,7 +1,7 @@
 import 'package:mobx/mobx.dart';
-import 'package:nossos_pontos/domain/points_item_model.dart';
+import 'package:nossos_pontos/domain/models/points_item_model.dart';
+import 'package:nossos_pontos/domain/models/user_model.dart';
 import 'package:nossos_pontos/domain/rank_item_datasource.dart';
-import 'package:nossos_pontos/domain/user_model.dart';
 
 part 'home_controller.g.dart';
 
@@ -27,18 +27,18 @@ abstract class _HomeController with Store {
     return userList;
   }
 
-  // @action
-  // setPoints() async {
-  //   toggleVisibility();
-  //   // userList = (await rankItemDatasource.getRankItem()).asObservable();
-  //   // return userList;
-  // }
-
   @observable
   Observable<bool> isVisibleModalPoint = false.obs();
 
   @observable
   Observable<bool> backButtonPressed = false.obs();
+
+  // @action
+  // void editMotivo(String user, int totalPoint,) {
+  //   int userIndex = verificarUser(user);
+  //   rankItemDatasource.editMotivoFirebase(
+  //       user, totalPoint, userIndex);
+  // }
 
   @action
   void toggleVisibility() {
@@ -57,27 +57,30 @@ abstract class _HomeController with Store {
     }
   }
 
-  setPoints(int points, bool isPositivePoints, String motivo) {
-    int totalPoint = 0;
+  verificarUser(String user) {
     for (var i = 0; i < userList.length; i++) {
-      if (selectedUser == userList[i].name) {
-        if (isPositivePoints == true) {
-          totalPoint = (points + userList[i].pointsTotal).toInt();
-        } else {
-          totalPoint = (userList[i].pointsTotal - points).toInt();
-        }
-        rankItemDatasource.setPointsFirebase(
-          selectedUser,
-          totalPoint,
-          i,
-          PointsItemModel(
-              motivo: motivo,
-              points: points,
-              isPositivePoints: isPositivePoints),
-        );
+      if (user == userList[i].name) {
+        return i;
       }
     }
-    toggleVisibility();
+  }
+
+  setPoints(int points, bool isPositivePoints, String motivo) {
+    int totalPoint = 0;
+    int userIndex = verificarUser(selectedUser);
+    if (isPositivePoints == true) {
+      totalPoint = (points + userList[userIndex].pointsTotal).toInt();
+    } else {
+      totalPoint = (userList[userIndex].pointsTotal - points).toInt();
+    }
+    rankItemDatasource.setPointsFirebase(
+      selectedUser,
+      totalPoint,
+      userIndex,
+      PointsItemModel(
+          motivo: motivo, points: points, isPositivePoints: isPositivePoints),
+    );
+
     getUser();
   }
 }
