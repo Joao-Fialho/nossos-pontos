@@ -4,6 +4,36 @@ import 'package:nossos_pontos/domain/models/user_model.dart';
 
 class RankItemDatasource {
   FirebaseFirestore db = FirebaseFirestore.instance;
+  // final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  // Stream<List<PointsItemModel>> getPointsItemListStream(String userId) {
+  //   return _firestore
+  //       .collection('pointsItemUser')
+  //       .doc(userId)
+  //       .collection('pointsItemList')
+  //       .snapshots()
+  //       .map((snapshot) {
+  //     return snapshot.docs
+  //         .map((doc) => PointsItemModel.fromDocument(doc))
+  //         .toList();
+  //   });
+  // }
+
+  // Future<void> updatePointsItem(
+  //     String userId, String itemId, Map<String, dynamic> updatedData) async {
+  //   try {
+  //     DocumentReference documentReference = _firestore
+  //         .collection('pointsItemUser')
+  //         .doc(userId)
+  //         .collection('pointsItemList')
+  //         .doc(itemId);
+
+  //     await documentReference.update(updatedData);
+  //     print('Documento atualizado com sucesso!');
+  //   } catch (e) {
+  //     print('Erro ao atualizar documento: $e');
+  //   }
+  // }
 
   Future<List<UserModel>> getUserFirebase() async {
     List<UserModel> userModels = [];
@@ -31,32 +61,13 @@ class RankItemDatasource {
             PointsItemModel.fromDocument(pointsItemListDoc);
         pointsItemList.add(pointItem);
       }
-      int totalPoints = somaTotalPoints(pointsItemList);
-      UserModel userModel = UserModel.fromDocument(
-          pointsItemUserDoc, pointsItemList, totalPoints);
+      UserModel userModel =
+          UserModel.fromDocument(pointsItemUserDoc, pointsItemList);
       userModels.add(userModel);
+      somaTotalPoints(pointsItemList, userModel.id);
     }
 
     return userModels;
-  }
-
-  somaTotalPoints(List<PointsItemModel> pointsItemList) {
-    var totalPoints = 0;
-    for (var pointsItemList in pointsItemList) {
-      if (pointsItemList.isPositivePoints == true) {
-        totalPoints = totalPoints + pointsItemList.points;
-      } else {
-        totalPoints = totalPoints - pointsItemList.points;
-      }
-    }
-    // final dataUser = <String, dynamic>{
-    //   "name": user,
-    //   "pointsItemList": "/0$userIndex/pointsItemList",
-    //   "pointsTotal": totalPoint,
-    // };
-    // pointsItemUserCollection.doc('0$userIndex').set(dataUser);
-
-    return totalPoints.toInt();
   }
 
   setPointsFirebase(String user, int totalPoint, int userIndex,
@@ -89,23 +100,22 @@ class RankItemDatasource {
         .collection("PointsItemUser/$userId/pointsItemList")
         .doc(pointsItem.id)
         .update(editData);
+  }
 
-    // pointsItemUserCollection.call();
-    print(pointsItemUserCollection);
-    // final dataUser = <String, dynamic>{
-    //   "name": user,
-    //   "pointsItemList": "/0$userIndex/pointsItemList",
-    //   "pointsTotal": totalPoint,
-    // };
-    // final dataPoints = <String, dynamic>{
-    //   "isPositivePoints": pointsItemModel.isPositivePoints,
-    //   "motivo": pointsItemModel.motivo,
-    //   "points": pointsItemModel.points,
-    //   'createdAt': FieldValue.serverTimestamp(),
-    // };
-    // pointsItemUserCollection.doc('0$userIndex').set(dataUser);
-    // final userMap = (await pointsItemUserCollection.get()).docs[userIndex];
-
-    // ((await userMap.reference.collection('pointsItemList').d()).docs[1]).data();
+  somaTotalPoints(List<PointsItemModel> pointsItemList, userId) {
+    var totalPoints = 0;
+    for (var pointsItemList in pointsItemList) {
+      if (pointsItemList.isPositivePoints == true) {
+        totalPoints = totalPoints + pointsItemList.points;
+      } else {
+        totalPoints = totalPoints - pointsItemList.points;
+      }
+    }
+    final editData = <String, dynamic>{
+      "pointsTotal": totalPoints,
+    };
+    final pointsItemUserCollection =
+        db.collection("PointsItemUser").doc(userId).update(editData);
+    return totalPoints.toInt();
   }
 }

@@ -16,12 +16,12 @@ class UserModel {
   });
 
   factory UserModel.fromDocument(DocumentSnapshot doc,
-      List<PointsItemModel> pointsItemList, int totalPoint) {
+      List<PointsItemModel> pointsItemList) {
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
     return UserModel(
       id: doc.id,
       name: data['name'] ?? '',
-      pointsTotal: totalPoint,
+      pointsTotal: data['pointsTotal'],
       pointsItemList: pointsItemList,
     );
   }
