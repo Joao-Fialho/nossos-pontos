@@ -25,6 +25,22 @@ mixin _$HomeController on _HomeController, Store {
     });
   }
 
+  late final _$selectedUserAtom =
+      Atom(name: '_HomeController.selectedUser', context: context);
+
+  @override
+  String get selectedUser {
+    _$selectedUserAtom.reportRead();
+    return super.selectedUser;
+  }
+
+  @override
+  set selectedUser(String value) {
+    _$selectedUserAtom.reportWrite(value, super.selectedUser, () {
+      super.selectedUser = value;
+    });
+  }
+
   late final _$isVisibleModalPointAtom =
       Atom(name: '_HomeController.isVisibleModalPoint', context: context);
 
@@ -83,6 +99,7 @@ mixin _$HomeController on _HomeController, Store {
   String toString() {
     return '''
 userList: ${userList},
+selectedUser: ${selectedUser},
 isVisibleModalPoint: ${isVisibleModalPoint},
 backButtonPressed: ${backButtonPressed}
     ''';
