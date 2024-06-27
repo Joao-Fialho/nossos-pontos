@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:nossos_pontos/components/edit_motivo_modal.dart';
 import 'package:nossos_pontos/controllers/home_controller.dart';
 import 'package:nossos_pontos/domain/models/points_item_model.dart';
@@ -77,65 +78,67 @@ class _CardNameState extends State<CardName> {
         ),
       ),
       children: [
-        SizedBox(
-          height: size.height * 0.5,
-          child: ListView.separated(
-            controller: _scrollController,
-            itemCount: widget.pointsItemList.length,
-            separatorBuilder: (context, index) => Container(
-              height: 3,
-              color: Colors.blue,
-            ),
-            itemBuilder: (BuildContext context, int index) {
-              return Container(
-                color: Colors.white,
-                padding: const EdgeInsets.fromLTRB(15, 30, 30, 30),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    IconButton(
-                        onPressed: () {
-                          setState(() {
-                            showEditMotivoModal(
-                              context,
-                              widget.controller,
-                              widget.pointsItemList[index].motivo,
-                              widget.pointsItemList[index].points,
-                              index,
-                              widget.pointsItemList[index],
-                              widget.userModel,
-                            );
-                          });
-                        },
-                        icon: const Icon(
-                          Icons.mode_edit_rounded,
-                          color: Colors.blue,
-                        )),
-                    Expanded(
-                      child: Text(
-                        widget.controller.firstLetterCapitalized(
-                          widget.pointsItemList[index].motivo,
+        Observer(builder: (context) {
+          return SizedBox(
+            height: size.height * 0.5,
+            child: ListView.separated(
+              controller: _scrollController,
+              itemCount: widget.pointsItemList.length,
+              separatorBuilder: (context, index) => Container(
+                height: 3,
+                color: Colors.blue,
+              ),
+              itemBuilder: (BuildContext context, int index) {
+                return Container(
+                  color: Colors.white,
+                  padding: const EdgeInsets.fromLTRB(15, 30, 30, 30),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      IconButton(
+                          onPressed: () {
+                            setState(() {
+                              showEditMotivoModal(
+                                context,
+                                widget.controller,
+                                widget.pointsItemList[index].motivo,
+                                widget.pointsItemList[index].points,
+                                index,
+                                widget.pointsItemList[index],
+                                widget.userModel,
+                              );
+                            });
+                          },
+                          icon: const Icon(
+                            Icons.mode_edit_rounded,
+                            color: Colors.blue,
+                          )),
+                      Expanded(
+                        child: Text(
+                          widget.controller.firstLetterCapitalized(
+                            widget.pointsItemList[index].motivo,
+                          ),
+                          style: const TextStyle(),
                         ),
-                        style: const TextStyle(),
                       ),
-                    ),
-                    const SizedBox(
-                      width: 40,
-                    ),
-                    Text(
-                      '${widget.controller.pointsPositivosString(widget.pointsItemList[index].isPositivePoints)} ${widget.pointsItemList[index].points}',
-                      style: TextStyle(
-                          color: widget.pointsItemList[index].isPositivePoints
-                              ? Colors.green
-                              : Colors.red,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
-        )
+                      const SizedBox(
+                        width: 40,
+                      ),
+                      Text(
+                        '${widget.controller.pointsPositivosString(widget.pointsItemList[index].isPositivePoints)} ${widget.pointsItemList[index].points}',
+                        style: TextStyle(
+                            color: widget.pointsItemList[index].isPositivePoints
+                                ? Colors.green
+                                : Colors.red,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          );
+        })
       ],
     );
   }
@@ -155,13 +158,15 @@ void showEditMotivoModal(
     builder: (BuildContext context) {
       return Dialog(
         backgroundColor: Colors.transparent,
-        child: EditMotivoModal(
-          controller: controller,
-          motivoOld: motivoOld,
-          pointsOld: pointsOld,
-          pointsItem: pointsItem,
-          userModel: userModel,
-        ),
+        child: Observer(builder: (context) {
+          return EditMotivoModal(
+            controller: controller,
+            motivoOld: motivoOld,
+            pointsOld: pointsOld,
+            pointsItem: pointsItem,
+            userModel: userModel,
+          );
+        }),
       );
     },
   );

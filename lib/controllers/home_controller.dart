@@ -22,6 +22,7 @@ abstract class _HomeController with Store {
 
   @action
   getUser() async {
+    userList.clear();
     userList = (await rankItemDatasource.getUserFirebase()).asObservable();
     selectedUser = userList.first.name;
     return userList;
@@ -32,14 +33,6 @@ abstract class _HomeController with Store {
 
   @observable
   Observable<bool> backButtonPressed = false.obs();
-
-  @action
-  void editMotivo(PointsItemModel pointsItem, int newPoints, String newMotivo,
-      String userId) {
-    rankItemDatasource.editMotivoFirebase(
-        pointsItem, newMotivo, newPoints, userId);
-    getUser();
-  }
 
   @action
   void toggleVisibility() {
@@ -66,7 +59,8 @@ abstract class _HomeController with Store {
     }
   }
 
-  setPoints(int points, bool isPositivePoints, String motivo) {
+  Future<void> setPoints(
+      int points, bool isPositivePoints, String motivo) async {
     int totalPoint = 0;
     int userIndex = verificarUser(selectedUser);
     if (isPositivePoints == true) {
@@ -74,7 +68,7 @@ abstract class _HomeController with Store {
     } else {
       totalPoint = (userList[userIndex].pointsTotal - points).toInt();
     }
-    rankItemDatasource.setPointsFirebase(
+    await rankItemDatasource.setPointsFirebase(
       selectedUser,
       totalPoint,
       userIndex,
@@ -85,6 +79,13 @@ abstract class _HomeController with Store {
           isPositivePoints: isPositivePoints),
     );
 
+    getUser();
+  }
+
+  Future<void> editMotivo(PointsItemModel pointsItem, int newPoints,
+      String newMotivo, String userId) async {
+    await rankItemDatasource.editMotivoFirebase(
+        pointsItem, newMotivo, newPoints, userId);
     getUser();
   }
 }

@@ -30,90 +30,98 @@ class _HomePageState extends State<HomePage> {
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.w400),
         ),
       ),
-      body: SizedBox(
-        height: size.height,
-        width: size.width,
-        child: Stack(
-          children: [
-            SizedBox(
-              height: size.height,
-              width: size.width,
-              child: Stack(
-                children: [
-                  Container(
-                    height: size.height,
-                    width: size.width,
-                    child: Image.asset(
-                      'assets/background_image.jpg',
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  Positioned.fill(
-                    child: BackdropFilter(
-                      filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
-                      child: Container(
-                        color: Colors.grey.withOpacity(0.1),
+      body: Observer(builder: (context) {
+        if (controller.userList.isEmpty) {
+          return const Center(
+              child: CircularProgressIndicator(
+            color: Colors.blueAccent,
+          ));
+        }
+        return SizedBox(
+          height: size.height,
+          width: size.width,
+          child: Stack(
+            children: [
+              SizedBox(
+                height: size.height,
+                width: size.width,
+                child: Stack(
+                  children: [
+                    Container(
+                      height: size.height,
+                      width: size.width,
+                      child: Image.asset(
+                        'assets/background_image.jpg',
+                        fit: BoxFit.cover,
                       ),
                     ),
-                  ),
-                ],
+                    Positioned.fill(
+                      child: BackdropFilter(
+                        filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
+                        child: Container(
+                          color: Colors.grey.withOpacity(0.1),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            Padding(
-              padding:
-                  const EdgeInsets.only(bottom: 0, left: 8, right: 8, top: 8),
-              child: Observer(
-                builder: (context) {
-                  return ListView.separated(
-                    itemCount: controller.userList.length,
-                    separatorBuilder: (context, index) {
-                      return const SizedBox(
-                        height: 10,
-                      );
-                    },
-                    itemBuilder: (BuildContext context, int index) {
-                      return CardName(
-                        userModel: controller.userList[index],
-                        pointsItemList:
-                            controller.userList[index].pointsItemList,
-                        controller: controller,
-                      );
-                    },
-                  );
-                },
+              Padding(
+                padding:
+                    const EdgeInsets.only(bottom: 0, left: 8, right: 8, top: 8),
+                child: Observer(
+                  builder: (context) {
+                    return ListView.separated(
+                      itemCount: controller.userList.length,
+                      separatorBuilder: (context, index) {
+                        return const SizedBox(
+                          height: 10,
+                        );
+                      },
+                      itemBuilder: (BuildContext context, int index) {
+                        return CardName(
+                          userModel: controller.userList[index],
+                          pointsItemList:
+                              controller.userList[index].pointsItemList,
+                          controller: controller,
+                        );
+                      },
+                    );
+                  },
+                ),
               ),
-            ),
-            GestureDetector(
-              onTap: () {
-                setState(() {
-                  if (MediaQuery.of(context).viewInsets.bottom == 0) {
-                    controller.toggleVisibility();
-                  } else {
-                    FocusScope.of(context).requestFocus(FocusNode());
-                  }
-                });
-              },
-              child: Observer(builder: (context) {
-                if (controller.isVisibleModalPoint.value == true) {
-                  return WillPopScope(
-                    onWillPop: () async {
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    if (MediaQuery.of(context).viewInsets.bottom == 0) {
                       controller.toggleVisibility();
-                      return false;
-                    },
-                    child: Expanded(
-                      child: PointsModal(
-                        controller: controller,
+                    } else {
+                      FocusScope.of(context).requestFocus(FocusNode());
+                    }
+                  });
+                },
+                child: Observer(builder: (context) {
+                  if (controller.isVisibleModalPoint.value == true) {
+                    return WillPopScope(
+                      onWillPop: () async {
+                        controller.toggleVisibility();
+                        return false;
+                      },
+                      child: Expanded(
+                        child: PointsModal(
+                          controller: controller,
+                        ),
                       ),
-                    ),
-                  );
-                } else {
-                  return Container();
-                }
-              }),
-            )
-          ],
-        ),
-      ),
+                    );
+                  } else {
+                    return Container();
+                  }
+                }),
+              )
+            ],
+          ),
+        );
+      }),
       floatingActionButton: FloatingActionButton(
         splashColor: Colors.blue,
         backgroundColor: Colors.lightBlue.shade300,
