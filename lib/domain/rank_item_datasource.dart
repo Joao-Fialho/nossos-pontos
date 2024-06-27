@@ -1,38 +1,62 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:nossos_pontos/domain/mappers/user_adapter.dart';
 import 'package:nossos_pontos/domain/models/points_item_model.dart';
 import 'package:nossos_pontos/domain/models/user_model.dart';
 
 class RankItemDatasource {
   FirebaseFirestore db = FirebaseFirestore.instance;
-  UserAdapter userAdapter = UserAdapter();
 
   Future<List<UserModel>> getUserFirebase() async {
-    final pointsItemUserCollection = db.collection("PointsItemUser");
-    final userDoc = (await pointsItemUserCollection.get()).docs;
+    List<UserModel> userModels = [];
 
-    final userList = userDoc.map(
-      (e) async {
-        final pointsItemDocs = (await e.reference
-                .collection('pointsItemList')
-                .orderBy('createdAt', descending: true)
-                .get())
-            .docs
-            .map(
-          (e) {
-            return e.data();
-          },
-        );
+    final CollectionReference pointsItemUserCollection =
+        db.collection("PointsItemUser");
 
-        var pointsItemList = {...e.data(), 'pointsItemList': pointsItemDocs};
+    final QuerySnapshot pointsItemUserDoc =
+        await pointsItemUserCollection.get();
 
-        return userAdapter.fromMap(pointsItemList);
-      },
-    ).toList();
+    for (QueryDocumentSnapshot pointsItemUserDoc in pointsItemUserDoc.docs) {
+      List<PointsItemModel> pointsItemList = [];
 
-    final user = await Future.wait(userList);
+      CollectionReference pointsItemListCollection = pointsItemUserCollection
+          .doc(pointsItemUserDoc.id)
+          .collection('pointsItemList');
 
-    return user;
+      QuerySnapshot pointsItemListSnapshot = await pointsItemListCollection
+          .orderBy('createdAt', descending: true)
+          .get();
+
+      for (QueryDocumentSnapshot pointsItemListDoc
+          in pointsItemListSnapshot.docs) {
+        PointsItemModel pointItem =
+            PointsItemModel.fromDocument(pointsItemListDoc);
+        pointsItemList.add(pointItem);
+      }
+      int totalPoints = somaTotalPoints(pointsItemList);
+      UserModel userModel = UserModel.fromDocument(
+          pointsItemUserDoc, pointsItemList, totalPoints);
+      userModels.add(userModel);
+    }
+
+    return userModels;
+  }
+
+  somaTotalPoints(List<PointsItemModel> pointsItemList) {
+    var totalPoints = 0;
+    for (var pointsItemList in pointsItemList) {
+      if (pointsItemList.isPositivePoints == true) {
+        totalPoints = totalPoints + pointsItemList.points;
+      } else {
+        totalPoints = totalPoints - pointsItemList.points;
+      }
+    }
+    // final dataUser = <String, dynamic>{
+    //   "name": user,
+    //   "pointsItemList": "/0$userIndex/pointsItemList",
+    //   "pointsTotal": totalPoint,
+    // };
+    // pointsItemUserCollection.doc('0$userIndex').set(dataUser);
+
+    return totalPoints.toInt();
   }
 
   setPointsFirebase(String user, int totalPoint, int userIndex,
@@ -54,55 +78,34 @@ class RankItemDatasource {
 
     userMap.reference.collection('pointsItemList').add(dataPoints);
   }
+
+  editMotivoFirebase(PointsItemModel pointsItem, String newMotivo,
+      int newPoints, String userId) async {
+    final editData = <String, dynamic>{
+      "motivo": newMotivo,
+      "points": newPoints,
+    };
+    final pointsItemUserCollection = db
+        .collection("PointsItemUser/$userId/pointsItemList")
+        .doc(pointsItem.id)
+        .update(editData);
+
+    // pointsItemUserCollection.call();
+    print(pointsItemUserCollection);
+    // final dataUser = <String, dynamic>{
+    //   "name": user,
+    //   "pointsItemList": "/0$userIndex/pointsItemList",
+    //   "pointsTotal": totalPoint,
+    // };
+    // final dataPoints = <String, dynamic>{
+    //   "isPositivePoints": pointsItemModel.isPositivePoints,
+    //   "motivo": pointsItemModel.motivo,
+    //   "points": pointsItemModel.points,
+    //   'createdAt': FieldValue.serverTimestamp(),
+    // };
+    // pointsItemUserCollection.doc('0$userIndex').set(dataUser);
+    // final userMap = (await pointsItemUserCollection.get()).docs[userIndex];
+
+    // ((await userMap.reference.collection('pointsItemList').d()).docs[1]).data();
+  }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// // ignore_for_file: public_member_api_docs, sort_constructors_first
-// import 'package:nossos_pontos/domain/points_item_model.dart';
-
-// class RankItemDatasource {
-//   RankItemDatasource({
-//     required this.rankItemObjetctList,
-//   });
-//   List<RankItemObject> rankItemObjetctList = [
-//     RankItemObject(
-//       motivo:
-//           'teste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste teste',
-//       points: 100,
-//       pointsPositivos: false,
-//     ),
-//     RankItemObject(
-//       motivo: 'teste teste',
-//       points: 100,
-//       pointsPositivos: false,
-//     ),
-//     RankItemObject(
-//       motivo: 'teste teste',
-//       points: 100,
-//       pointsPositivos: true,
-//     ),
-//     RankItemObject(
-//       motivo: 'teste teste',
-//       points: 100,
-//       pointsPositivos: true,
-//     ),
-//     RankItemObject(
-//       motivo: 'teste teste',
-//       points: 100,
-//       pointsPositivos: true,
-//     ),
-//   ];
-// }

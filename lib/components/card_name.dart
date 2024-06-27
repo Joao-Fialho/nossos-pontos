@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:nossos_pontos/components/edit_motivo_modal.dart';
 import 'package:nossos_pontos/controllers/home_controller.dart';
 import 'package:nossos_pontos/domain/models/points_item_model.dart';
+import 'package:nossos_pontos/domain/models/user_model.dart';
 
 class CardName extends StatefulWidget {
-  final String name;
-  final int pointsTotal;
-  final List<PointsItemModel> pointsItem;
+  final List<PointsItemModel> pointsItemList;
   final HomeController controller;
+  final UserModel userModel;
   const CardName({
     super.key,
-    required this.name,
-    required this.pointsTotal,
-    required this.pointsItem,
+    required this.userModel,
+    required this.pointsItemList,
     required this.controller,
   });
 
@@ -66,11 +66,11 @@ class _CardNameState extends State<CardName> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              widget.name,
+              widget.userModel.name,
               style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             Text(
-              '${widget.pointsTotal}',
+              '${widget.userModel.pointsTotal}',
               style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
           ],
@@ -81,7 +81,7 @@ class _CardNameState extends State<CardName> {
           height: size.height * 0.5,
           child: ListView.separated(
             controller: _scrollController,
-            itemCount: widget.pointsItem.length,
+            itemCount: widget.pointsItemList.length,
             separatorBuilder: (context, index) => Container(
               height: 3,
               color: Colors.blue,
@@ -89,19 +89,32 @@ class _CardNameState extends State<CardName> {
             itemBuilder: (BuildContext context, int index) {
               return Container(
                 color: Colors.white,
-                padding: const EdgeInsets.all(30),
+                padding: const EdgeInsets.fromLTRB(15, 30, 30, 30),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     IconButton(
-                        //onPressed: widget.controller.editMotivo(
-                          //  widget.name, widget.pointsTotal, widget.),
-                        onPressed: (){},
-                        icon: Icon(Icons.mode_edit_rounded)),
+                        onPressed: () {
+                          setState(() {
+                            showEditMotivoModal(
+                              context,
+                              widget.controller,
+                              widget.pointsItemList[index].motivo,
+                              widget.pointsItemList[index].points,
+                              index,
+                              widget.pointsItemList[index],
+                              widget.userModel,
+                            );
+                          });
+                        },
+                        icon: const Icon(
+                          Icons.mode_edit_rounded,
+                          color: Colors.blue,
+                        )),
                     Expanded(
                       child: Text(
                         widget.controller.firstLetterCapitalized(
-                          widget.pointsItem[index].motivo,
+                          widget.pointsItemList[index].motivo,
                         ),
                         style: const TextStyle(),
                       ),
@@ -110,9 +123,9 @@ class _CardNameState extends State<CardName> {
                       width: 40,
                     ),
                     Text(
-                      '${widget.controller.pointsPositivosString(widget.pointsItem[index].isPositivePoints)} ${widget.pointsItem[index].points}',
+                      '${widget.controller.pointsPositivosString(widget.pointsItemList[index].isPositivePoints)} ${widget.pointsItemList[index].points}',
                       style: TextStyle(
-                          color: widget.pointsItem[index].isPositivePoints
+                          color: widget.pointsItemList[index].isPositivePoints
                               ? Colors.green
                               : Colors.red,
                           fontWeight: FontWeight.bold),
@@ -126,4 +139,30 @@ class _CardNameState extends State<CardName> {
       ],
     );
   }
+}
+
+void showEditMotivoModal(
+  BuildContext context,
+  HomeController controller,
+  String motivoOld,
+  int pointsOld,
+  int indexPointsItemList,
+  PointsItemModel pointsItem,
+  UserModel userModel,
+) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return Dialog(
+        backgroundColor: Colors.transparent,
+        child: EditMotivoModal(
+          controller: controller,
+          motivoOld: motivoOld,
+          pointsOld: pointsOld,
+          pointsItem: pointsItem,
+          userModel: userModel,
+        ),
+      );
+    },
+  );
 }

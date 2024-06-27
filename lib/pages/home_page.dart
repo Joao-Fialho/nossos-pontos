@@ -73,9 +73,9 @@ class _HomePageState extends State<HomePage> {
                     },
                     itemBuilder: (BuildContext context, int index) {
                       return CardName(
-                        name: controller.userList[index].name,
-                        pointsTotal: controller.userList[index].pointsTotal,
-                        pointsItem: controller.userList[index].pointsItemList,
+                        userModel: controller.userList[index],
+                        pointsItemList:
+                            controller.userList[index].pointsItemList,
                         controller: controller,
                       );
                     },
@@ -119,7 +119,6 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Colors.lightBlue.shade300,
         onPressed: () {
           setState(() {
-            // controller.toggleVisibility();
             showPointsModal(context, controller);
           });
           // Modular.to.navigate('/pointsModal', arguments: controller);
@@ -130,27 +129,27 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       bottomNavigationBar: ClipRRect(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
         child: BottomAppBar(
           color: Colors.lightBlue.shade300,
           child: LayoutBuilder(builder: (context, constraints) {
             return Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Container(
+                SizedBox(
                   height: constraints.maxHeight,
                   width: constraints.maxWidth * 0.3,
-                  child: Column(
+                  child: const Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      Container(
-                        child: const Icon(
+                      SizedBox(
+                        child: Icon(
                           Icons.today_rounded,
                           color: Colors.white,
                           size: 30,
                         ),
                       ),
-                      const Text(
+                      Text(
                         'Lembretes',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
@@ -160,20 +159,20 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                 ),
-                Container(
+                SizedBox(
                   height: constraints.maxHeight,
                   width: constraints.maxWidth * 0.3,
-                  child: Column(
+                  child: const Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      Container(
-                        child: const Icon(
+                      SizedBox(
+                        child: Icon(
                           Icons.graphic_eq,
                           color: Colors.white,
                           size: 30,
                         ),
                       ),
-                      const Text(
+                      Text(
                         'Pontos',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
@@ -183,20 +182,20 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                 ),
-                Container(
+                SizedBox(
                   height: constraints.maxHeight,
                   width: constraints.maxWidth * 0.3,
-                  child: Column(
+                  child: const Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      Container(
-                        child: const Icon(
+                      SizedBox(
+                        child: Icon(
                           Icons.perm_device_information,
                           color: Colors.white,
                           size: 30,
                         ),
                       ),
-                      const Text(
+                      Text(
                         'Informaçoes',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,

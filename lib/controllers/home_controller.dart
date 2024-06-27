@@ -33,12 +33,13 @@ abstract class _HomeController with Store {
   @observable
   Observable<bool> backButtonPressed = false.obs();
 
-  // @action
-  // void editMotivo(String user, int totalPoint,) {
-  //   int userIndex = verificarUser(user);
-  //   rankItemDatasource.editMotivoFirebase(
-  //       user, totalPoint, userIndex);
-  // }
+  @action
+  void editMotivo(PointsItemModel pointsItem, int newPoints, String newMotivo,
+      String userId) {
+    rankItemDatasource.editMotivoFirebase(
+        pointsItem, newMotivo, newPoints, userId);
+    getUser();
+  }
 
   @action
   void toggleVisibility() {
@@ -78,76 +79,12 @@ abstract class _HomeController with Store {
       totalPoint,
       userIndex,
       PointsItemModel(
-          motivo: motivo, points: points, isPositivePoints: isPositivePoints),
+          id: '',
+          motivo: motivo,
+          points: points,
+          isPositivePoints: isPositivePoints),
     );
 
     getUser();
   }
 }
-
-// final List<PointsItemUser> pointsItemUser = [
-//   PointsItemUser(
-//     name: 'Joao',
-//     pointsTotal: 123,
-//     pointsItemList: [
-//       PointsItem(
-//         motivo:
-//             'teste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste teste',
-//         points: 100,
-//         isPositivePoints: false,
-//       ),
-//       PointsItem(
-//         motivo: 'teste teste',
-//         points: 100,
-//         isPositivePoints: false,
-//       ),
-//       PointsItem(
-//         motivo: 'teste teste',
-//         points: 100,
-//         isPositivePoints: true,
-//       ),
-//       PointsItem(
-//         motivo: 'teste teste',
-//         points: 100,
-//         isPositivePoints: true,
-//       ),
-//       PointsItem(
-//         motivo: 'teste teste',
-//         points: 100,
-//         isPositivePoints: true,
-//       ),
-//     ],
-//   ),
-//   PointsItemUser(
-//     name: 'kelly',
-//     pointsTotal: 233,
-//     pointsItemList: [
-//       PointsItem(
-//         motivo:
-//             'teste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste testeteste teste teste teste',
-//         points: 100,
-//         isPositivePoints: false,
-//       ),
-//       PointsItem(
-//         motivo: 'teste teste',
-//         points: 100,
-//         isPositivePoints: false,
-//       ),
-//       PointsItem(
-//         motivo: 'teste teste',
-//         points: 100,
-//         isPositivePoints: true,
-//       ),
-//       PointsItem(
-//         motivo: 'teste teste',
-//         points: 100,
-//         isPositivePoints: true,
-//       ),
-//       PointsItem(
-//         motivo: 'teste teste',
-//         points: 100,
-//         isPositivePoints: true,
-//       ),
-//     ],
-//   )
-// ];

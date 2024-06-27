@@ -1,12 +1,28 @@
-import 'package:nossos_pontos/domain/models/points_item_model.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+import 'points_item_model.dart';
 
 class UserModel {
+  final String id;
+  final String name;
+  final int pointsTotal;
+  final List<PointsItemModel> pointsItemList;
+
   UserModel({
+    required this.id,
     required this.name,
     required this.pointsTotal,
     required this.pointsItemList,
   });
-  String name = '';
-  int pointsTotal = 0;
-  List<PointsItemModel> pointsItemList = [];
+
+  factory UserModel.fromDocument(DocumentSnapshot doc,
+      List<PointsItemModel> pointsItemList, int totalPoint) {
+    Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+    return UserModel(
+      id: doc.id,
+      name: data['name'] ?? '',
+      pointsTotal: totalPoint,
+      pointsItemList: pointsItemList,
+    );
+  }
 }
