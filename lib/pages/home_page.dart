@@ -16,6 +16,12 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   var controller = HomeController();
+  Future<void> _refresh() async {
+    await Future.delayed(Duration(seconds: 2)); // Simula uma chamada de rede
+    setState(() {
+      controller.getUser();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,88 +43,91 @@ class _HomePageState extends State<HomePage> {
             color: Colors.blueAccent,
           ));
         }
-        return SizedBox(
-          height: size.height,
-          width: size.width,
-          child: Stack(
-            children: [
-              SizedBox(
-                height: size.height,
-                width: size.width,
-                child: Stack(
-                  children: [
-                    Container(
-                      height: size.height,
-                      width: size.width,
-                      child: Image.asset(
-                        'assets/background_image.jpg',
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    Positioned.fill(
-                      child: BackdropFilter(
-                        filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
-                        child: Container(
-                          color: Colors.grey.withOpacity(0.1),
+        return RefreshIndicator(
+          onRefresh: _refresh,
+          child: SizedBox(
+            height: size.height,
+            width: size.width,
+            child: Stack(
+              children: [
+                SizedBox(
+                  height: size.height,
+                  width: size.width,
+                  child: Stack(
+                    children: [
+                      Container(
+                        height: size.height,
+                        width: size.width,
+                        child: Image.asset(
+                          'assets/background_image.jpg',
+                          fit: BoxFit.cover,
                         ),
                       ),
-                    ),
-                  ],
+                      Positioned.fill(
+                        child: BackdropFilter(
+                          filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
+                          child: Container(
+                            color: Colors.grey.withOpacity(0.1),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              Padding(
-                padding:
-                    const EdgeInsets.only(bottom: 0, left: 8, right: 8, top: 8),
-                child: Observer(
-                  builder: (context) {
-                    return ListView.separated(
-                      itemCount: controller.userList.length,
-                      separatorBuilder: (context, index) {
-                        return const SizedBox(
-                          height: 10,
-                        );
-                      },
-                      itemBuilder: (BuildContext context, int index) {
-                        return CardName(
-                          userModel: controller.userList[index],
-                          pointsItemList:
-                              controller.userList[index].pointsItemList,
-                          controller: controller,
-                        );
-                      },
-                    );
-                  },
+                Padding(
+                  padding: const EdgeInsets.only(
+                      bottom: 0, left: 8, right: 8, top: 8),
+                  child: Observer(
+                    builder: (context) {
+                      return ListView.separated(
+                        itemCount: controller.userList.length,
+                        separatorBuilder: (context, index) {
+                          return const SizedBox(
+                            height: 10,
+                          );
+                        },
+                        itemBuilder: (BuildContext context, int index) {
+                          return CardName(
+                            userModel: controller.userList[index],
+                            pointsItemList:
+                                controller.userList[index].pointsItemList,
+                            controller: controller,
+                          );
+                        },
+                      );
+                    },
+                  ),
                 ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-                    if (MediaQuery.of(context).viewInsets.bottom == 0) {
-                      controller.toggleVisibility();
-                    } else {
-                      FocusScope.of(context).requestFocus(FocusNode());
-                    }
-                  });
-                },
-                child: Observer(builder: (context) {
-                  if (controller.isVisibleModalPoint.value == true) {
-                    return WillPopScope(
-                      onWillPop: () async {
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      if (MediaQuery.of(context).viewInsets.bottom == 0) {
                         controller.toggleVisibility();
-                        return false;
-                      },
-                      child: Expanded(
-                        child: PointsModal(
-                          controller: controller,
+                      } else {
+                        FocusScope.of(context).requestFocus(FocusNode());
+                      }
+                    });
+                  },
+                  child: Observer(builder: (context) {
+                    if (controller.isVisibleModalPoint.value == true) {
+                      return WillPopScope(
+                        onWillPop: () async {
+                          controller.toggleVisibility();
+                          return false;
+                        },
+                        child: Expanded(
+                          child: PointsModal(
+                            controller: controller,
+                          ),
                         ),
-                      ),
-                    );
-                  } else {
-                    return Container();
-                  }
-                }),
-              )
-            ],
+                      );
+                    } else {
+                      return Container();
+                    }
+                  }),
+                )
+              ],
+            ),
           ),
         );
       }),
