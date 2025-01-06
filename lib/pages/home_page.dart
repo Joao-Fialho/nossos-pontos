@@ -145,88 +145,88 @@ class _HomePageState extends State<HomePage> {
           color: Colors.white,
         ),
       ),
-      bottomNavigationBar: ClipRRect(
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-        child: BottomAppBar(
-          color: Colors.lightBlue.shade300,
-          child: LayoutBuilder(builder: (context, constraints) {
-            return Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                SizedBox(
-                  height: constraints.maxHeight,
-                  width: constraints.maxWidth * 0.3,
-                  child: const Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      SizedBox(
-                        child: Icon(
-                          Icons.today_rounded,
-                          color: Colors.white,
-                          size: 30,
-                        ),
-                      ),
-                      Text(
-                        'Lembretes',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: constraints.maxHeight,
-                  width: constraints.maxWidth * 0.3,
-                  child: const Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      SizedBox(
-                        child: Icon(
-                          Icons.graphic_eq,
-                          color: Colors.white,
-                          size: 30,
-                        ),
-                      ),
-                      Text(
-                        'Pontos',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: constraints.maxHeight,
-                  width: constraints.maxWidth * 0.3,
-                  child: const Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      SizedBox(
-                        child: Icon(
-                          Icons.perm_device_information,
-                          color: Colors.white,
-                          size: 30,
-                        ),
-                      ),
-                      Text(
-                        'Informaçoes',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            );
-          }),
-        ),
-      ),
+      // bottomNavigationBar: ClipRRect(
+      //   borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+      //   child: BottomAppBar(
+      //     color: Colors.lightBlue.shade300,
+      //     child: LayoutBuilder(builder: (context, constraints) {
+      //       return Row(
+      //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      //         children: [
+      //           SizedBox(
+      //             height: constraints.maxHeight,
+      //             width: constraints.maxWidth * 0.3,
+      //             child: const Column(
+      //               mainAxisAlignment: MainAxisAlignment.spaceAround,
+      //               children: [
+      //                 SizedBox(
+      //                   child: Icon(
+      //                     Icons.today_rounded,
+      //                     color: Colors.white,
+      //                     size: 30,
+      //                   ),
+      //                 ),
+      //                 Text(
+      //                   'Lembretes',
+      //                   style: TextStyle(
+      //                     fontWeight: FontWeight.bold,
+      //                     color: Colors.white,
+      //                   ),
+      //                 ),
+      //               ],
+      //             ),
+      //           ),
+      //           SizedBox(
+      //             height: constraints.maxHeight,
+      //             width: constraints.maxWidth * 0.3,
+      //             child: const Column(
+      //               mainAxisAlignment: MainAxisAlignment.spaceAround,
+      //               children: [
+      //                 SizedBox(
+      //                   child: Icon(
+      //                     Icons.graphic_eq,
+      //                     color: Colors.white,
+      //                     size: 30,
+      //                   ),
+      //                 ),
+      //                 Text(
+      //                   'Pontos',
+      //                   style: TextStyle(
+      //                     fontWeight: FontWeight.bold,
+      //                     color: Colors.white,
+      //                   ),
+      //                 ),
+      //               ],
+      //             ),
+      //           ),
+      //           SizedBox(
+      //             height: constraints.maxHeight,
+      //             width: constraints.maxWidth * 0.3,
+      //             child: const Column(
+      //               mainAxisAlignment: MainAxisAlignment.spaceAround,
+      //               children: [
+      //                 SizedBox(
+      //                   child: Icon(
+      //                     Icons.perm_device_information,
+      //                     color: Colors.white,
+      //                     size: 30,
+      //                   ),
+      //                 ),
+      //                 Text(
+      //                   'Informaçoes',
+      //                   style: TextStyle(
+      //                     fontWeight: FontWeight.bold,
+      //                     color: Colors.white,
+      //                   ),
+      //                 ),
+      //               ],
+      //             ),
+      //           ),
+      //         ],
+      //       );
+      //     }),
+      //   ),
+      // ),
     );
   }
 }
@@ -242,3 +242,4 @@ void showPointsModal(BuildContext context, HomeController controller) {
     },
   );
 }
+  
